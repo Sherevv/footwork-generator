@@ -1,0 +1,19 @@
+<div class="content-div about-div" ng-controller="aboutController" >
+    <h1 class="page-heading" translate>About</h1>
+    <p translate>About_1</p>
+    <p translate>About_2</p>
+    <p><span translate>About_3</span><span ng-bind-html="ml"></span><span translate>About_3_1</span><a class="text-btn"  href="#" ng-click="isCollapsed = !isCollapsed"><span translate>About_4</span></a>.</p>
+
+    <div id="contentForm" ng-init="isCollapsed=true" collapse="isCollapsed">
+        <div ng-include="'tpls/contact-form.html'"></div>
+    </div>
+
+    <p><span translate>About_5</span> <a class="text-btn"  href="#" ng-click="isPaymentCollapsed = !isPaymentCollapsed"><span translate>About_5_2</span></a></p>
+
+    <div id="payment" ng-init="isPaymentCollapsed=true" collapse="isPaymentCollapsed">
+
+    </div>
+    <br/>
+    <p><span translate>About_6</span> <a href="#socBtns"><span class="glyphicon glyphicon-arrow-down"></span></a></p>
+
+</div>

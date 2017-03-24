@@ -1,0 +1,121 @@
+<div ng-controller="GeneratorController" ng-init="initState()">
+    <h1 class="main-header"><span translate>Footwork_Generator</span> {{version}}</h1>
+
+    <div id="generator">
+        <div class="cards">
+            <div ng-repeat="card in cards track by $index" ng-cloak class="card-block">
+                <div ng-show="options.step_bits" class="card-index"><span class="badge">{{$index+1}}</span></div>
+                <div class="card {{card.class}}">{{card.num}}</div>
+                <div ng-show="options.step_names" class="card-lbl {{card.label_class}}">{{card.step}}</div>
+            </div>
+        </div>
+        <div class="sound-btns-generator" ng-show="isAudio">
+            <button class="btn btn-general btn-warning" ng-if="!beats_on" ng-click="toggleSound()"><span
+                    class="glyphicon glyphicon-play"></span></button>
+            <button class="btn btn-general btn-warning" ng-if="beats_on" ng-click="toggleSound()"><span
+                    class="glyphicon glyphicon-stop"></span></button>
+        </div>
+        <button class="btn btn-general btn-warning btn-lg generator-btn" ng-click="generate()" translate>Generate
+        </button>
+
+    </div>
+    <div class="info">
+        <accordion close-others="oneAtATime">
+            <accordion-group is-open="status.open1">
+                <accordion-heading><i class="glyphicon glyphicon-cog"></i>
+                    <span translate>Settings</span> <i class="pull-right toggle-icon glyphicon"
+                                                       ng-class="{'glyphicon-chevron-down': status.open1, 'glyphicon-chevron-left': !status.open1}"></i>
+                </accordion-heading>
+
+                <p><span class="glyphicon glyphicon-info-sign"></span> {{ 'About_options' | translate}} <a href ui-sref="app.description({lang: activeLang})" translate>
+                    Description
+                </a>
+                </p>
+
+                <div class="well">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <p><label translate>Number_of_bits</label><br/>
+                                <label class="label-radio"><input type="radio" ng-model="options.bit_count" value="6"/>
+                                    6 {{ 'bits' | translate}}</label>
+                                <label class="label-radio"><input type="radio" ng-model="options.bit_count" value="8"
+                                                                  checked="checked"/> 8 {{ 'bits' | translate}}</label>
+                            </p>
+
+                            <p><label>{{ 'Evenness' | translate}}:</label>
+                                <select ng-model="options.evenness">
+                                    <option value="no" ng-selected="selected" translate>No_matter</option>
+                                    <option value="even" translate>Save_even</option>
+                                    <option value="odd" translate>Save_odd</option>
+                                </select>
+                            </p>
+
+                            <p>
+                                <label class="label-radio"><input type="checkbox" ng-model="options.step_names"/>
+                                    {{ 'Show_step_names' | translate}}</label>
+                            </p>
+
+                            <p>
+                                <label class="label-radio"><input type="checkbox" ng-model="options.step_bits"/>
+                                    {{ 'Show_bits' | translate}}</label>
+                            </p>
+
+                            <p>
+                                <label class="label-radio"><input type="checkbox" ng-model="options.couple"/>
+                                    {{ 'Group_two_steps' | translate}}</label>
+                            </p>
+
+
+                        </div>
+
+                        <div class="col-xs-6"><label translate>Steps</label>
+
+                            <p>
+                                <label class="label-radio"><input type="checkbox" ng-model="options.rock_step"/>
+                                    {{ 'Save_rock_step' | translate}}</label>
+                            </p>
+
+                            <p>
+                                <label class="label-radio"><input type="checkbox" ng-model="options.show_triple"/>
+                                    {{ 'Show_triple' | translate}}</label>
+                            </p>
+
+                            <p><label class="label-radio"><input type="checkbox"
+                                                                 ng-model="options.kick_instead_hold"/>
+                                {{ 'kick_instead_hold' | translate}}</label>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div ng-controller="soundController" class="col-xs-12 well" ng-init="initSound()">
+                    <div class="sound-label" translate>Sound</div>
+                    <div class="sound-btns" ng-show="isAudio">
+                        <button class="btn btn-general btn-warning" ng-if="!beats_on" ng-click="toggleSound()"><span
+                                class="glyphicon glyphicon-play"></span></button>
+                        <button class="btn btn-general btn-warning" ng-if="beats_on" ng-click="toggleSound()"><span
+                                class="glyphicon glyphicon-stop"></span></button>
+
+                        <div class="btn-group">
+                            <label class="btn btn-primary" ng-model="options.sound.isRhythmer" btn-radio="true"><span
+                                    translate>Rhythm</span></label>
+                            <label class="btn btn-primary" ng-model="options.sound.isRhythmer" btn-radio="false"><span translate>Metronome</span></label>
+                        </div>
+                    </div>
+                    <p ng-if="!isAudio" translate>Sound_Error</p>
+
+                    <div class="slider-div">
+                        <label class="slider-label" translate>Tempo</label>
+
+                        <div class="slider">
+                            <input ng-model="options.sound.bpm" type="text" id="Slider1" slider options="bpmOptions"/>
+                        </div>
+                    </div>
+                </div>
+
+
+            </accordion-group>
+        </accordion>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+{
+  "About": "About",
+  "About_1": "The idea of generator was based on the rythm <a href=\"http://msds.livejournal.com/1537470.html\">course</a> by <a href=\"https://www.facebook.com/marina.ananova\"><i class=\"glyphicon glyphicon-user\"></i> Marina Ananova</a>, a lindy hop teacher.",
+  "About_2": "The generator is written to help lindy hop dancers (and possibly other styles dancers) to improve their dancing skills by varying the basic steps. Also we offer several exercises and some theory",
+  "About_3": "If you have suggestions, comments, write on ",
+  "About_3_1": " or use ",
+  "About_4": " this form",
+  "About_5": "If you want to support the project or to thank the author, you can",
+  "About_5_2": "buy me tea or coffee:)",
+  "About_6": "Don't forget to tell your friends! There are share buttons at the bottom of the page ",
+  "ContactForm_1": "<span class=\"ast\">*</span> - required fields",
+  "ContactForm_2": "Invalid e-mail format!",
+  "ContactForm_3": "This field is required!",
+  "ContactForm_4": "Something went wrong!",
+  "ContactForm_5": "Success!",
+  "Send": "Send",
+  "Name": "Name",
+  "Message": "Message"
+}

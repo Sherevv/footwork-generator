@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html ng-app="fwg" ng-controller="rootCtrl" translate-cloak>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title property="og:title">Footwork Generator - variate your lindy hop basic!</title>
+    <meta name="robots" content="all" />
+    <meta name="description" content="{{'META_DESCRIPTION' | translate}}" />
+    <meta property="og:description" content="The Footwork Generator for lindy hop dancers" />
+    <meta name="keywords" content = "{{'META_KEYWORDS' | translate}}" />
+    <meta property="og:image" content="assets/images/preview.png" />
+    <meta property="og:url" content="http://fwg.it4t.ru/" />
+    <meta property="og:title" content="Footwork Generator - variate your lindy hop basic!" />
+    <!-- Replace base value with yours -->
+    <base href="/"/>
+    <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/css/loading-bar.min.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/css/angular-awesome-slider.min.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/css/style.css"/>
+    <script src="assets/js/angular.min.js"></script>
+    <script src="assets/js/angular-sanitize.min.js"></script>
+    <script src="assets/js/angular-animate.min.js"></script>
+    <script src="assets/js/angular-cookies.min.js"></script>
+    <script src="assets/js/angular-ui-router.min.js"></script>
+    <script src="assets/js/ui-bootstrap-tpls.min.js"></script>
+    <script src="assets/js/angular-translate.min.js"></script>
+    <script src="assets/js/angular-translate-loader-partial.min.js"></script>
+    <script src="assets/js/angular-awesome-slider.min.js"></script>
+    <script src="assets/js/loading-bar.min.js"></script>
+    <script src="assets/js/howler.min.js"></script>
+    <script src="assets/js/fifer.js"></script>
+    <script src="assets/js/AudioSampleLoader.js"></script>
+    <script src="assets/js/Showdown.min.js"></script>
+    <script src="assets/js/markdown.js"></script>
+    <script src="assets/js/app.js"></script>
+</head>
+<body>
+
+<div class='header' ng-controller="navigationController" ng-init="setInit()">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#navbar-header" aria-expanded="false" ng-init="isCollapsed = true"
+                        ng-click="isCollapsed = !isCollapsed">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Footwork Generator</a>
+            </div>
+            <div collapse="isCollapsed" class="collapse navbar-collapse bs-js-navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li ui-sref-active="active">
+                        <a href ui-sref="app.main({lang: activeLang})" translate>
+                            Generator
+                        </a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a href ui-sref="app.exercises({lang: activeLang})" translate>
+                            Exercises
+                        </a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a href ui-sref="app.description({lang: activeLang})" translate>
+                            Description
+                        </a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a href ui-sref="app.changes({lang: activeLang})" translate>
+                            Changes
+                        </a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a href ui-sref="app.about({lang: activeLang})" translate>
+                            About
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a ng-href="{{otherLangURL}}" >
+                            <div class="flag-{{otherLang}}"></div> <span translate>Lang</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container-main container">
+    <div class="middle">
+        <div ui-view ng-show="loadComplete">
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="infooter">
+        <a name="socBtns"></a>
+        <script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script>
+        <div ng-show="activeLang == 'ru'" class="yashare-auto-init" data-yashareTitle="Генератор Футворка - внеси разнообразие в свой линди хоп бейсик!" data-yashareDescription="Генератор Футворка для танцоров линди хопа." data-yashareL10n="ru" data-yashareType="icon" data-yashareQuickServices="vkontakte,facebook,twitter,lj,odnoklassniki,moimir,gplus" data-yashareImage="http://fwg.it4t.ru/assets/images/preview.png" data-yashareLink="http://fwg.it4t.ru/" ></div>
+        <div ng-show="activeLang == 'en'" class="yashare-auto-init" data-yashareTitle="Footwork Generator - variate your lindy hop basic!" data-yashareDescription="The Footwork Generator for lindy hop dancers." data-yashareL10n="en" data-yashareType="icon" data-yashareQuickServices="vkontakte,facebook,twitter,lj,odnoklassniki,moimir,gplus" data-yashareImage="http://fwg.it4t.ru/assets/images/preview.png" data-yashareLink="http://fwg.it4t.ru/" ></div>
+        <br/>
+        <p>Copyright &copy; 2015-2017 Footwork Generator - Designed by <a href="http://it4t.ru/" target="_blank">it4t.ru</a></p>
+    </div>
+</div>
+
+</body>
+</html>
