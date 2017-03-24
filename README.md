@@ -1,7 +1,7 @@
 ### The Footwork Generator
 This repository contains the source code of a web app for lindy hop dancers.
 
-Try it: http://fwg.it4t.ru
+Try it: https://fwg.it4t.ru
 
 ### License
 
