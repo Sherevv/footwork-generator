@@ -1,0 +1,45 @@
+@import "mixins";
+
+.icon {
+  height: 20px;
+  width: 20px;
+  padding: 0;
+  margin: 0;
+  fill: #000;
+
+  &-play,
+  &-stop {
+    fill: #fff;
+  }
+
+  &-btn {
+    margin: -5px -5px -5px -5px;
+    float: left;
+  }
+
+  &-settings {
+    margin-bottom: -3px;
+    margin-right: 5px;
+  }
+
+  &-info {
+    margin-bottom: -4px;
+    margin-right: 3px;
+    fill: #75a4d6;
+  }
+
+  &-arrowDown {
+    height: 17px;
+    width: 17px;
+    margin-bottom: -4px;
+    margin-right: 3px;
+    fill: #337ab7;
+  }
+
+  &-form{
+    fill: #337ab7;
+  }
+
+}
+
+

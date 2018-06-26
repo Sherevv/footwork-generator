@@ -1,0 +1,4 @@
+module.exports = {
+    EMAIL: 'mail@example.com',
+    FORM_ACTION: '/contact.php'
+};

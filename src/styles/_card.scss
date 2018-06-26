@@ -1,0 +1,103 @@
+
+.cards {
+  display: block;
+  vertical-align: middle;
+  margin-top: 20px;
+}
+
+.card-block {
+  display: inline-block;
+  vertical-align: middle;
+}
+.cards-block-sm .card-block {
+  vertical-align: top;
+  text-align: center;
+  letter-spacing: 0;
+  word-spacing: -1ch;
+  margin-right: -4px;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.card {
+  width: 40px;
+  height: 60px;
+  margin: 10px;
+  line-height: 65px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #9ab;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  font-size: 28px;
+  text-shadow: 0 1px 2px #bbb;
+  box-shadow: 1px 1px 3px 0 #aaa;
+}
+
+.cards-block-sm .card, .card-sm {
+  width: 20px;
+  height: 30px;
+  margin: 5px;
+  float: none;
+  line-height: 30px;
+  font-size: 14px;
+}
+
+.white {
+  background-color: #fafafa;
+}
+
+.blue {
+  background-color: #49c0f0;
+}
+
+.red {
+  background-color: #f2825b;
+}
+
+
+.card-lbl{
+  background-color: #f9f28d;
+  display: block;
+  border: 1px solid #ddd;
+
+  padding: 1px 2px;
+  border-radius: 6px;
+  margin: 0 7px 2px 7px;
+}
+.left-lbl{
+  border-right: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-right: 0;
+}
+.right-lbl{
+  border-left: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: 0;
+}
+
+
+.card-index span{
+
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-radius: 10px;
+  background-color: #aaa;
+
+}
+
+.bit-select{
+  width: 58px;
+}

@@ -1,0 +1,272 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.nav-main {
+  display: block;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e7e7e7;
+  width: 100%;
+  font-size: 14px;
+  z-index: 100;
+  position: relative;
+
+
+  @media (max-width: $menu-breakpoint) {
+    margin-left: 0;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    margin-left: -20px;
+    flex-grow: 1;
+
+    display: inline-block;
+
+    &.nav-right{
+      flex-grow: 0;
+      align-self: center;
+      padding: 0;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      margin-left: -10px;
+    }
+    @media (max-width: $menu-breakpoint) {
+      margin-left: 0;
+    }
+
+    a {
+       padding: 15px 20px;
+       display: block;
+       text-decoration: none;
+       color: $text-color;
+       font-weight: 400;
+
+       &:visited {
+         color: #555;
+       }
+
+       @include hover-focus-active {
+         background-color: #f9f9f9;
+         color: #000;
+         text-shadow: 1px 1px 10px rgb(199, 199, 199);
+       }
+
+       @media (max-width: $breakpoint-md) {
+         font-size: 14px;
+         padding-left: 10px;
+         padding-right: 10px;
+       }
+
+       @media (max-width: $menu-breakpoint) {
+         padding: 10px 15px;
+         @include hover-focus-active {
+           padding-bottom: 10px;
+           border-left: 6px solid #000;
+           border-bottom: 1px;
+         }
+       }
+
+     }
+  }
+
+
+
+  .navbar-brand{
+    padding-top: 15px;
+    display: block;
+    text-decoration: none;
+    margin-right: 40px;
+    font-size: 18px;
+    float: left;
+    padding-left: 0;
+
+    @include hover-focus-active {
+      background-color: #f9f9f9;
+      color: #000;
+    }
+
+    @media (max-width: $menu-breakpoint) {
+      padding: 13px 20px;
+      padding-left: 0;
+      padding-bottom: 0;
+      margin-right: 5px;
+      @include hover-focus-active {
+        padding-bottom: 0;
+        border-left: none;
+        border-bottom: none;
+      }
+    }
+  }
+
+}
+
+.nav {
+  display: flex;
+  @media (max-width: $menu-breakpoint) {
+    display: none;
+    #nav-toggle:checked + .container & {
+      /* когда чекбокс активен меню становится видимым */
+      display: flex;
+      position: absolute;
+      width: 100%;
+      background-color: rgba(248,248,248,0.9);
+      margin-left: -15px;
+      padding-left: 20px;
+      padding-right: 20px;
+      border-bottom: 1px solid #e7e7e7;
+
+
+      .nav-right{
+        flex-grow: 0;
+        align-self: auto;
+        padding: 0;
+      }
+    }
+  }
+
+
+  > ul > li {
+    display: inline-block;
+    @media (max-width: $menu-breakpoint) {
+      display: block;
+    }
+  }
+}
+
+.active,
+.current-menu-parent {
+  > a {
+    background-color: #fcfcfc;
+    border-bottom: 2px solid #000;
+    padding-bottom: 13px;
+
+    @media (max-width: $menu-breakpoint) {
+      border-bottom: 0;
+      border-left: 6px solid #000;
+      padding: 10px 15px;
+    }
+  }
+}
+
+.current-menu-parent > a {
+  border-bottom-style: dashed;
+  @media (max-width: $menu-breakpoint) {
+    border: 0;
+  }
+}
+
+.menu-item-has-children {
+
+  @include hover-focus-active {
+    > ul {
+      visibility: visible;
+      transition-delay: 0s; /* react immediately on hover */
+    }
+  }
+
+  > ul {
+    visibility: hidden;
+    position: absolute;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid $gray-line-color;
+    transition: 0.2s .8s; /* delay of 1 seconds on hover off */
+
+    @media (max-width: $menu-breakpoint) {
+      position: static;
+      visibility: visible;
+      border: 0;
+      > li > a {
+        padding-left: 30px;
+      }
+    }
+
+  }
+
+  > a .icon {
+    width: 10px;
+    height: 14px;
+    vertical-align: middle;
+  }
+
+}
+
+.nav-toggle {
+  display: none;
+  color: $text-color;
+  padding: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: right;
+
+
+  @media (max-width: $menu-breakpoint) {
+    display: block;
+  }
+
+  @include hover-focus-active {
+    color: #000;
+  }
+
+  .icon-nav{
+    height: 34px;
+    width: 44px;
+    vertical-align: bottom;
+    background-color: #eee;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    fill: #777;
+
+    @include hover-focus-active {
+      background-color: #ccc;
+    }
+  }
+
+  .icon-bars {
+    display: inline-block;
+  }
+  .icon-close {
+    display: none;
+  }
+
+  /*
+   * изменение символа переключателя
+   */
+  [id='nav-toggle']:checked + .container & {
+    .icon-bars {
+      display: none;
+    }
+    .icon-close {
+      display: inline-block;
+    }
+  }
+
+}
+
+.stick {
+  position: fixed;
+  top: 0;
+  border-bottom: 1px solid #717171;
+  opacity: 0.98;
+}
+
+.lang-btn{
+  background-color: #eaeaea;
+  border: 0;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+#logo{
+  background-image: url("img/logo.png");
+  width: 29px;
+  height: 40px;
+  float: left;
+  margin-right: 5px;
+  margin-top: -10px;
+}

@@ -1,0 +1,14 @@
+.form-group{
+  margin-bottom: 15px;
+}
+
+textarea{
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  margin: 0 !important;
+}
+
+input::placeholder,
+textarea::placeholder{
+  color: #777 !important;
+}

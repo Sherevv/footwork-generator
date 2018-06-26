@@ -1,0 +1,6 @@
+@mixin hover-focus-active() {
+  &:hover,
+  &:focus,
+  &.focus,
+  &:active { @content }
+}
