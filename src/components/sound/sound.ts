@@ -10,7 +10,7 @@ import {SvgIconComponent} from '../../ui/svgicon';
     data() {
         return {
             isAudio: this.$props.isA,
-            isRhythmer: this.$props.options.sound.isRhythmer,
+            soundType: this.$props.options.sound.soundType,
             bpm: this.$props.options.sound.bpm
         }
     },
@@ -51,7 +51,7 @@ export class SoundComponent extends Vue {
 
     audioContext: any;
 
-    isRhythmer = true;
+    soundType = 1;
     bpm = 60;
 
     setupAudioContext(): void {
@@ -90,7 +90,7 @@ export class SoundComponent extends Vue {
         }
 
 
-        this.$watch('isRhythmer', debounce(() => {
+        this.$watch('soundType', debounce(() => {
             this.updateSound();
         }, 300));
 
@@ -136,13 +136,13 @@ export class SoundComponent extends Vue {
             songExt = 'ogg';
         else if (this.codecs.wav)
             songExt = 'wav';
-        audioLoader.src = "assets/sounds/"+ fileName + '.' + songExt;
+        audioLoader.src = `assets/sounds/${fileName}.${songExt}`;
         audioLoader.ctx = this.audioContext;
         audioLoader.onload = () => {
             bufferSourceSetter(audioLoader.response);
         };
         audioLoader.onerror = function () {
-            console.log("Error loading Metronome Audio");
+            console.log(`Error loading ${fileName}.${songExt} Audio`);
         };
         audioLoader.send();
     }
@@ -153,7 +153,7 @@ export class SoundComponent extends Vue {
             this.beats_on = false;
             this.toggleSound();
         }
-        this.$bus.$emit("updateSoundProps", {bpm: this.bpm, isRhythmer: this.isRhythmer});
+        this.$bus.$emit("updateSoundProps", {bpm: this.bpm, soundType: this.soundType});
     }
 
     toggleSound(fromTop = false) {
@@ -171,11 +171,16 @@ export class SoundComponent extends Vue {
 
     play() {
         this.beats_on = true;
-        if (this.isRhythmer) {
-            this.playBeats();
-        }
-        else {
-            this.playMetronome();
+
+        switch (this.soundType) {
+            case 1:
+                this.playBeats();
+                break;
+            case 2:
+                this.playMetronome();
+                break;
+            case 3:
+                this.playBoth();
         }
     }
 
@@ -197,10 +202,21 @@ export class SoundComponent extends Vue {
         }
     }
 
+    playBoth() {
+        this.rhythmSource = this.startSource(this.audioContext, this.setRhythmSource(this.beats, this.bpm));
+        this.metronomeSource = this.startSource(this.audioContext, this.setMetronomeSource(this.bpm));
+    }
+
     stopSound() {
         if (this.isWebAudioAPI) {
             if (this.playSource) {
                 this.stopSource(this.playSource);
+            }
+            if (this.metronomeSource) {
+                this.stopSource(this.metronomeSource);
+            }
+            if (this.rhythmSource) {
+                this.stopSource(this.rhythmSource);
             }
         }
     }
@@ -262,7 +278,14 @@ export class SoundComponent extends Vue {
 
     setMetronomeSource(bpm: number) {
         let rate = 60 / bpm;
-        let metronomeBuffer = this.mergeWithSilenceBuffer(this.metronomeBufferSource, rate);
+        let noteRate = rate / 3;
+        // Create buffer one note size with silence
+        let emptyBuffer = this.createEmptyBuffer(noteRate);
+
+        // Create buffer double note size with sound
+        let metronomeBuffer = this.mergeWithSilenceBuffer(this.metronomeBufferSource, 2*noteRate);
+        metronomeBuffer = this.appendBuffer(emptyBuffer, metronomeBuffer); // 1 + 2 = 3 note size
+
         return metronomeBuffer;
     }
 

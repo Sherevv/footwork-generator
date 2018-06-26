@@ -49,7 +49,7 @@ export class GeneratorComponent extends Vue {
         show_triple: true,
         couple: true,
         sound: {
-            isRhythmer: true,
+            soundType: true,
             bpm: 130
         },
         kick_instead_hold: false,
