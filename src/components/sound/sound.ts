@@ -41,7 +41,7 @@ export class SoundComponent extends Vue {
     metronomeSource: any = null;
     rhythmBufferSource: any = null;
     rhythmSource: any = null;
-
+    playSource: any = null;
 
     codecs: any = {
         mp3: null,
@@ -187,23 +187,20 @@ export class SoundComponent extends Vue {
 
     playBeats() {
         if (this.beats_on && this.isWebAudioAPI) {
-            this.setRhythmSource(this.beats, this.bpm);
+            this.playSource = this.startSource(this.audioContext, this.setRhythmSource(this.beats, this.bpm));
         }
     };
 
     playMetronome() {
         if (this.isWebAudioAPI) {
-            this.setMetronomeSource(this.bpm);
+            this.playSource = this.startSource(this.audioContext, this.setMetronomeSource(this.bpm));
         }
     }
 
     stopSound() {
         if (this.isWebAudioAPI) {
-            if (this.rhythmSource) {
-                this.stopSource(this.rhythmSource);
-            }
-            if (this.metronomeSource) {
-                this.stopSource(this.metronomeSource);
+            if (this.playSource) {
+                this.stopSource(this.playSource);
             }
         }
     }
@@ -213,6 +210,19 @@ export class SoundComponent extends Vue {
         source.stop ? source.stop(0) : source.noteOff(0);
         source.disconnect();
         source = null;
+    }
+
+    startSource(audioContext, soundBuffer) {
+        let source = audioContext.createBufferSource();
+        source.connect(audioContext.destination);
+
+        source.buffer = soundBuffer;
+        source.loop = true;
+
+        // Safari uses another api
+        source.start ? source.start(0) : source.noteOn(0);
+
+        return source;
     }
 
     setRhythmSource(beats: number[], bpm: number) {
@@ -247,23 +257,13 @@ export class SoundComponent extends Vue {
             }
         }
 
-        this.rhythmSource = this.audioContext.createBufferSource();
-        this.rhythmSource.connect(this.audioContext.destination);
-
-        this.rhythmSource.buffer = soundBuffer;
-        this.rhythmSource.loop = true;
-
-        this.rhythmSource.start ? this.rhythmSource.start(0) : this.rhythmSource.noteOn(0);
+        return soundBuffer;
     }
 
     setMetronomeSource(bpm: number) {
         let rate = 60 / bpm;
         let metronomeBuffer = this.mergeWithSilenceBuffer(this.metronomeBufferSource, rate);
-        this.metronomeSource = this.audioContext.createBufferSource();
-        this.metronomeSource.connect(this.audioContext.destination);
-        this.metronomeSource.buffer = metronomeBuffer;
-        this.metronomeSource.loop = true;
-        this.metronomeSource.start ? this.metronomeSource.start(0) : this.metronomeSource.noteOn(0);
+        return metronomeBuffer;
     }
 
     appendBuffer(buffer1: any, buffer2: any) {
