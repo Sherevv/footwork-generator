@@ -323,23 +323,6 @@ h2 {
   padding: 10px 15px;
 }
 
-.sound-label {
-  display: inline-block;
-  font-weight: bold;
-  min-width: 60px;
-}
-
-.sound-btns {
-  display: inline-block;
-}
-
-.sound-btns .btn-group {
-  margin-left: 10px
-}
-
-.settings_play-btn{
-  margin-top: 10px;
-}
 .slider {
   display: inline-block;
   margin-top: 10px;
@@ -430,4 +413,10 @@ a:visited{
   width: 149px;
   height: 149px;
   background-image: url("../assets/img/forkme.png");
+}
+
+.add-row-btn{
+  float: right;
+  margin-top: 25px;
+  margin-right: 15px;
 }

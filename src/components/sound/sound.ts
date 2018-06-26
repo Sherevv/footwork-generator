@@ -3,6 +3,7 @@ import {Component, Prop, Watch} from 'vue-property-decorator';
 import AudioSampleLoader from '../../lib/AudioSampleLoader.js';
 import debounce from 'debounce';
 import {SvgIconComponent} from '../../ui/svgicon';
+import './sound.scss';
 
 @Component({
     template: require('./sound.vue'),
