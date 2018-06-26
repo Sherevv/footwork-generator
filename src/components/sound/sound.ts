@@ -6,12 +6,14 @@ import {SvgIconComponent} from '../../ui/svgicon';
 
 @Component({
     template: require('./sound.vue'),
-    props: ['options', 'beats', 'isA'],
+    props: ['options', 'beats', 'isA', 'swOffClr'],
     data() {
         return {
             isAudio: this.$props.isA,
             soundType: this.$props.options.sound.soundType,
-            bpm: this.$props.options.sound.bpm
+            bpm: this.$props.options.sound.bpm,
+            isPlayAccent: this.$props.options.sound.isPlayAccent,
+            accentBit: this.$props.options.sound.accentBit
         }
     },
     beforeDestroy() {
@@ -41,7 +43,8 @@ export class SoundComponent extends Vue {
     metronomeSource: any = null;
     rhythmBufferSource: any = null;
     rhythmSource: any = null;
-    playSource: any = null;
+    accentBufferSource: any = null;
+    accentSource: any = null;
 
     codecs: any = {
         mp3: null,
@@ -52,7 +55,10 @@ export class SoundComponent extends Vue {
     audioContext: any;
 
     soundType = 1;
-    bpm = 60;
+    bpm = 130;
+    isPlayAccent = false;
+    accentBit = 8;
+
 
     setupAudioContext(): void {
         try {
@@ -89,20 +95,18 @@ export class SoundComponent extends Vue {
             console.error("Audio init error");
         }
 
-
-        this.$watch('soundType', debounce(() => {
-            this.updateSound();
-        }, 300));
-
         this.$watch('bpm', debounce((bpmNew: number) => {
                 this.rate = 60000 / bpmNew;
                 this.updateSound();
             }, 300)
         );
 
-        this.$watch('beats', debounce(() => {
+        this.$watch(() => {
+            return `${this.beats}${this.soundType}${this.isPlayAccent}${this.accentBit}`
+        }, debounce(() => {
             this.updateSound();
         }, 300));
+
 
         this.$bus.$on('updatePlayDown', (value: boolean) => {
             this.toggleSound(true);
@@ -114,14 +118,20 @@ export class SoundComponent extends Vue {
 
     loadSource() {
         this.loadSound("kick", this.setRhythmBufferSource);
-        this.loadSound("click", this.setMetronomeBufferSource);
+        this.loadSound("metro1", this.setMetronomeBufferSource);
+        this.loadSound("metro3", this.setAccentBufferSource);
     }
 
-    setRhythmBufferSource(source){
+    setRhythmBufferSource(source) {
         this.rhythmBufferSource = source;
     }
-    setMetronomeBufferSource(source){
+
+    setMetronomeBufferSource(source) {
         this.metronomeBufferSource = source;
+    }
+
+    setAccentBufferSource(source) {
+        this.accentBufferSource = source;
     }
 
     loadSound(fileName, bufferSourceSetter) {
@@ -151,7 +161,13 @@ export class SoundComponent extends Vue {
             this.beats_on = false;
             this.toggleSound();
         }
-        this.$bus.$emit("updateSoundProps", {bpm: this.bpm, soundType: this.soundType});
+        this.$bus.$emit("updateSoundProps",
+            {
+                bpm: this.bpm,
+                soundType: this.soundType,
+                isPlayAccent: this.isPlayAccent,
+                accentBit: this.accentBit
+            });
     }
 
     toggleSound(fromTop = false) {
@@ -180,6 +196,10 @@ export class SoundComponent extends Vue {
             case 3:
                 this.playBoth();
         }
+        if (this.isPlayAccent) {
+            this.accentSource = this.startSource(this.audioContext,
+                this.setAccentSource(this.accentBufferSource, this.accentBit, this.bpm));
+        }
     }
 
     stop() {
@@ -190,13 +210,13 @@ export class SoundComponent extends Vue {
 
     playBeats() {
         if (this.beats_on && this.isWebAudioAPI) {
-            this.playSource = this.startSource(this.audioContext, this.setRhythmSource(this.beats, this.bpm));
+            this.rhythmSource = this.startSource(this.audioContext, this.setRhythmSource(this.beats, this.bpm));
         }
     };
 
     playMetronome() {
         if (this.isWebAudioAPI) {
-            this.playSource = this.startSource(this.audioContext, this.setMetronomeSource(this.bpm));
+            this.metronomeSource = this.startSource(this.audioContext, this.setMetronomeSource(this.bpm));
         }
     }
 
@@ -206,17 +226,16 @@ export class SoundComponent extends Vue {
     }
 
     stopSound() {
-        if (this.isWebAudioAPI) {
-            if (this.playSource) {
-                this.stopSource(this.playSource);
-            }
-            if (this.metronomeSource) {
-                this.stopSource(this.metronomeSource);
-            }
-            if (this.rhythmSource) {
-                this.stopSource(this.rhythmSource);
-            }
+        if (this.accentSource) {
+            this.stopSource(this.accentSource);
         }
+        if (this.metronomeSource) {
+            this.stopSource(this.metronomeSource);
+        }
+        if (this.rhythmSource) {
+            this.stopSource(this.rhythmSource);
+        }
+
     }
 
     stopSource(source) {
@@ -281,10 +300,26 @@ export class SoundComponent extends Vue {
         let emptyBuffer = this.createEmptyBuffer(noteRate);
 
         // Create buffer double note size with sound
-        let metronomeBuffer = this.mergeWithSilenceBuffer(this.metronomeBufferSource, 2*noteRate);
+        let metronomeBuffer = this.mergeWithSilenceBuffer(this.metronomeBufferSource, 2 * noteRate);
         metronomeBuffer = this.appendBuffer(emptyBuffer, metronomeBuffer); // 1 + 2 = 3 note size
 
         return metronomeBuffer;
+    }
+
+    setAccentSource(soundBufferSource, bit: number, bpm: number) {
+        let rate = 60 / bpm;
+        let noteRate = rate / 3;
+        // Create buffer one note size with silence
+        let emptyBuffer = this.createEmptyBuffer(noteRate);
+
+        // Create buffer double note size with sound
+        let soundBuffer = this.mergeWithSilenceBuffer(soundBufferSource, 2 * noteRate);
+        soundBuffer = this.appendBuffer(emptyBuffer, soundBuffer); // 1 + 2 = 3 note size
+
+        let emptyBitBuffer = this.createEmptyBuffer(rate * (bit - 1));
+        soundBuffer = this.appendBuffer(soundBuffer, emptyBitBuffer);
+
+        return soundBuffer;
     }
 
     appendBuffer(buffer1: any, buffer2: any) {

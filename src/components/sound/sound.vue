@@ -14,6 +14,18 @@
         </el-button>
     </div>
 
+    <p>
+        <label class="label-radio">
+            <el-switch v-model="isPlayAccent" :inactive-color="swOffClr"></el-switch>
+            {{ t('Play_accent') }}</label><br/>
+        <el-radio-group v-model="accentBit">
+            <el-radio-button :label="4">4</el-radio-button>
+            <el-radio-button :label="6">6</el-radio-button>
+            <el-radio-button :label="8">8</el-radio-button>
+        </el-radio-group>
+        {{ t('bits') }}
+    </p>
+
     <div class="slider-div">
         <label class="slider-label">
             {{t('Tempo')}}

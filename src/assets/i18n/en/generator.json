@@ -19,6 +19,7 @@
   "Rhythm":"Rhythm",
   "Metronome":"Metronome",
   "Together":"Both",
+  "Play_accent":"play accent on each:",
   "Sound_Error":"Sorry, we can not play the sound in your browser. Try a different browser or check if you have Flash.",
   "Steps":"Steps",
   "kick_instead_hold": "kick instead hold",

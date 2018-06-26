@@ -120,7 +120,7 @@
                 <p v-if="!isAudio" v-translate>Sound_Error</p>
 
                 <it-sound v-if="isAudio" :options="options" :beats="beats"
-                          :isA="isAudio"></it-sound>
+                          :isA="isAudio" :swOffClr="swOffClr"></it-sound>
             </el-collapse-item>
         </el-collapse>
 

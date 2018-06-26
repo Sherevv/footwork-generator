@@ -49,8 +49,10 @@ export class GeneratorComponent extends Vue {
         show_triple: true,
         couple: true,
         sound: {
-            soundType: true,
-            bpm: 130
+            soundType: 1,
+            bpm: 130,
+            isPlayAccent: false,
+            accentBit:8
         },
         kick_instead_hold: false,
         manual_mode: false
