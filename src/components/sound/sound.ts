@@ -113,8 +113,6 @@ export class SoundComponent extends Vue {
     }
 
     loadSource() {
-        let buffer = {source:this.rhythmBufferSource};
-
         this.loadSound("kick", this.setRhythmBufferSource);
         this.loadSound("click", this.setMetronomeBufferSource);
     }
