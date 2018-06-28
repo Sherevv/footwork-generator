@@ -185,7 +185,7 @@ export class GeneratorComponent extends Vue {
         for (let i = 0; i < len; i++) {
 
             if (!use_old_nums) {
-                if (options.rock_step && i < 2)
+                if (options.rock_step && i%options.bit_count < 2)
                     num = 1;
                 else if (options.evenness !== 'no' && i === (options.bit_count - 1)) {
                     if (options.evenness === 'even') {
@@ -249,7 +249,7 @@ export class GeneratorComponent extends Vue {
                     cards[i].label_class = 'right-lbl';
                 }
             }
-            if (options.rock_step && i == 1 && options.couple) {
+            if (options.rock_step && i%options.bit_count == 1 && options.couple) {
                 cards[i - 1].step = 'rock';
                 cards[i - 1].label_class = 'left-lbl';
                 cards[i].step = 'step';
