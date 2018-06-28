@@ -12,9 +12,6 @@
             <el-radio-button :label="3">{{t('Together')}}</el-radio-button>
         </el-radio-group>
     </div>
-    <div class="settings_play-btn">
-
-    </div>
 
     <p>
         <label class="label-radio">

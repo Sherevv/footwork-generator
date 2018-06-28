@@ -1,0 +1,22 @@
+.sound-block{
+  clear: both;
+  padding-top: 15px;
+  border-top: 1px solid #dedede;
+}
+.sound-label {
+  display: inline-block;
+  font-weight: bold;
+  min-width: 60px;
+}
+
+.sound-btns {
+  display: inline-block;
+}
+
+.sound-btns .btn-group {
+  margin-left: 10px
+}
+
+.settings_play-btn{
+  margin-top: 10px;
+}
