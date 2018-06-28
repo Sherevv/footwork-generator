@@ -1,7 +1,7 @@
 {
   "name": "footwork-generator",
   "description": "The Footwork Generator for swing dancers",
-  "version": "2018.6.26",
+  "version": "2018.6.28",
   "author": "fwg@it4t.ru",
   "private": true,
   "scripts": {

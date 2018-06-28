@@ -17,7 +17,7 @@ Vue.use(VueTranslate, {
 });
 Vue.use(EventBus);
 Vue.use(VueLocalStorage);
-Vue.prototype.$ver = '2018.6.26';
+Vue.prototype.$ver = '2018.6.28';
 
 let router = new VueRouter({routes:routes});
 
