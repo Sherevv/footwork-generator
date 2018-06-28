@@ -187,7 +187,7 @@ export class GeneratorComponent extends Vue {
             if (!use_old_nums) {
                 if (options.rock_step && i%options.bit_count < 2)
                     num = 1;
-                else if (options.evenness !== 'no' && i === (options.bit_count - 1)) {
+                else if (options.evenness !== 'no' && i === (i%options.bit_count - 1)) {
                     if (options.evenness === 'even') {
                         if (sum % 2 == 0) {
                             num = this.getRandomFromArray([0, 2]);
