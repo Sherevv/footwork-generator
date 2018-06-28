@@ -8,7 +8,9 @@
 .card-block {
   display: inline-block;
   vertical-align: middle;
+  margin-bottom: 10px;
 }
+
 .cards-block-sm .card-block {
   vertical-align: top;
   text-align: center;
@@ -57,8 +59,7 @@
   background-color: #f2825b;
 }
 
-
-.card-lbl{
+.card-lbl {
   background-color: #f9f28d;
   display: block;
   border: 1px solid #ddd;
@@ -67,37 +68,44 @@
   border-radius: 6px;
   margin: 0 7px 2px 7px;
 }
-.left-lbl{
+
+.left-lbl {
   border-right: none;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   margin-right: 0;
 }
-.right-lbl{
+
+.right-lbl {
   border-left: none;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   margin-left: 0;
 }
 
-
-.card-index span{
-
+.card-index span,
+.row-index {
   display: inline-block;
   min-width: 10px;
   padding: 3px 7px;
   font-size: 12px;
   font-weight: 700;
-  line-height: 1;
+  line-height: 12px;
   color: #fff;
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
   border-radius: 10px;
   background-color: #aaa;
-
 }
 
-.bit-select{
+.row-index {
+  position: absolute;
+  margin-left: -30px;
+  margin-top: 30px;
+  background-color: #7faa86;
+}
+
+.bit-select {
   width: 58px;
 }

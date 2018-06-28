@@ -1,0 +1,31 @@
+.add-row-btn, .del-row-btn {
+  float: right;
+  margin-top: 25px;
+  margin-right: 70px;
+  position: absolute;
+  right: 0;
+}
+
+.del-row-btn {
+  margin-right: 120px;
+}
+
+.generator-btns {
+  clear: both;
+}
+
+.row6:nth-child(6n) {
+  margin-right: 50px;
+}
+
+.row6:nth-child(6n-5) {
+  margin-left: 50px;
+}
+
+.row4:nth-child(4n) {
+  margin-right: 100px;
+}
+
+.row4:nth-child(4n-3) {
+  margin-left: 100px;
+}

@@ -36,8 +36,13 @@
     fill: #337ab7;
   }
 
-  &-form{
+  &-form {
     fill: #337ab7;
+  }
+
+  &-plus, &-minus {
+    margin: -5px -10px -5px -10px;
+    fill: #fff;
   }
 
 }

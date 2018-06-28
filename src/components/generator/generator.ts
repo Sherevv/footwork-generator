@@ -2,6 +2,7 @@ import Vue from 'vue';
 import {Component} from 'vue-property-decorator';
 import {SoundComponent} from '../sound';
 import {SvgIconComponent} from "../../ui/svgicon";
+import './generator.scss';
 
 class Card {
     num: number;
@@ -39,20 +40,22 @@ export class GeneratorComponent extends Vue {
     swOffClr: string = '#ff999c';
     nums: number[] = [];
 
-    options:any = {};
+    options: any = {};
     options_def = {
         bit_count: 8,
+        rows: 1,
         evenness: 'even',
         rock_step: true,
         step_names: true,
         show_bits: true,
+        show_row_index: true,
         show_triple: true,
         couple: true,
         sound: {
             soundType: 1,
             bpm: 130,
             isPlayAccent: false,
-            accentBit:8
+            accentBit: 8
         },
         kick_instead_hold: false,
         manual_mode: false
@@ -73,7 +76,6 @@ export class GeneratorComponent extends Vue {
         // Load saved options from LocalStorage
         if (this.$ls.get('ver') == this.version) {
             let opt = this.$ls.get('options');
-            console.log(opt.sound.bpm);
             if (opt) {
                 this.options = opt;
             }
@@ -132,7 +134,7 @@ export class GeneratorComponent extends Vue {
         this.$bus.$on('updatePlayUp', (value: boolean) => {
             this.beats_on = value;
         });
-        this.$bus.$on('updateSoundProps', (value:any) => {
+        this.$bus.$on('updateSoundProps', (value: any) => {
             this.options.sound = value;
         });
 
@@ -147,6 +149,20 @@ export class GeneratorComponent extends Vue {
     toggleSound(): void {
         this.beats_on = !this.beats_on;
         this.$bus.$emit("updatePlayDown", this.beats_on);
+    }
+
+    addBeats() {
+        this.nums = this.nums.concat(this.nums.slice(-this.options.bit_count));
+        this.options.rows++;
+        this.rerender();
+    }
+
+    removeBeats() {
+        if (this.options.rows > 1) {
+            this.nums.splice(-this.options.bit_count, this.options.bit_count);
+            this.options.rows--;
+            this.rerender();
+        }
     }
 
     generate(nums: number[]): void {
@@ -165,7 +181,8 @@ export class GeneratorComponent extends Vue {
         let sum = 0;
         let num = 0;
         let num_arr: number[] = [];
-        for (let i = 0; i < options.bit_count; i++) {
+        let len = options.bit_count * options.rows;
+        for (let i = 0; i < len; i++) {
 
             if (!use_old_nums) {
                 if (options.rock_step && i < 2)
