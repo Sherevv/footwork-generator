@@ -144,7 +144,10 @@ class VueTranslate {
 
             // Load translations for common modules (not Views)
             vm.$on('language:modified', () => {
-                console.log('on: language:modified - commonModules');
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log('on: language:modified - commonModules');
+                }
+
                 for (let module of vm.commonModules) {
                     this.loadLocale(module);
                 }
