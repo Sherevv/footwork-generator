@@ -5,15 +5,15 @@
             <div v-for="(card, i) in cards" class="card-block" :class="['row' + options.bit_count]">
                 <div v-if="options.show_bits" class="card-index"><span class="badge">{{i + 1}}</span></div>
                 <div v-if="i%options.bit_count === 0 && options.show_row_index" class="row-index">{{Math.floor((i+1)/options.bit_count)+1}}</div>
-                <div class="card" :class="card.style">{{card.num}}</div>
+                <div class="card" :class="card.style">{{card.num_string}}</div>
                 <div v-if="options.step_names" class="card-lbl" :class="card.label_class">{{card.step}}</div>
                 <div v-if="options.manual_mode">
                     <el-select class="bit-select" v-model="nums[i]" @change="rerender()">
                         <el-option
-                                v-for="j in [0,1,2]"
-                                :key="j"
-                                :label="j"
-                                :value="j"
+                                v-for="j in classes"
+                                :key="j.num"
+                                :label="j.num_string"
+                                :value="j.num"
                                 size="mini">
                         </el-option>
                     </el-select>
@@ -103,6 +103,18 @@
                                 <el-switch v-model="options.kick_instead_hold" :inactive-color="swOffClr"
                                            :disabled="!options.step_names"></el-switch>
                                 {{ t('kick_instead_hold') }}</label>
+                            </p>
+
+                            <p><label>{{ t('Syncopation_max') }}:</label>
+                                <el-select v-model="options.syncopation" default-first-option>
+                                    <el-option
+                                            v-for="j in (options.bit_count+1)"
+                                            :key="j-1"
+                                            :label="j-1"
+                                            :value="j-1"
+                                            size="mini">
+                                    </el-option>
+                                </el-select>
                             </p>
                         </div>
                         <div class="col2">
