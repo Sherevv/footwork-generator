@@ -11,6 +11,16 @@ import {Component} from 'vue-property-decorator';
 })
 export class SocBtnsComponent extends Vue {
     mounted() {
+        let script = document.createElement('script');
+        script.onload = () => {
+            this.show();
+        };
+        script.async = true;
+        script.src = 'https://yastatic.net/share2/share.js';
+        document.head.appendChild(script);
+    }
+
+    show() {
 
         let content = {
             url: 'http://fwg.it4t.ru/',
@@ -27,20 +37,22 @@ export class SocBtnsComponent extends Vue {
             popupPosition: 'outer'
         };
 
+        try {
+            console.log('ya');
+            Ya.share2('ya-share-ru', {
+                content,
+                theme
+            });
 
-        Ya.share2('ya-share-ru', {
-            content,
-            theme
-        });
-
-        content['title'] = 'Footwork Generator - variate your lindy hop basic!';
-        content['description'] = 'The Footwork Generator for lindy hop dancers.';
-        theme['lang'] = 'en';
+            content['title'] = 'Footwork Generator - variate your lindy hop basic!';
+            content['description'] = 'The Footwork Generator for lindy hop dancers.';
+            theme['lang'] = 'en';
 
 
-        Ya.share2('ya-share-en', {
-            content,
-            theme
-        });
+            Ya.share2('ya-share-en', {
+                content,
+                theme
+            });
+        }catch (e) {}
     }
 }
