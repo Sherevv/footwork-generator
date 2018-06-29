@@ -13,14 +13,14 @@ export class SocBtnsComponent extends Vue {
     mounted() {
         let script = document.createElement('script');
         script.onload = () => {
-            this.show();
+            this.showBtns();
         };
         script.async = true;
         script.src = 'https://yastatic.net/share2/share.js';
         document.head.appendChild(script);
     }
 
-    show() {
+    showBtns() {
 
         let content = {
             url: 'http://fwg.it4t.ru/',
@@ -38,7 +38,6 @@ export class SocBtnsComponent extends Vue {
         };
 
         try {
-            console.log('ya');
             Ya.share2('ya-share-ru', {
                 content,
                 theme
