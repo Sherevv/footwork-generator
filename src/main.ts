@@ -19,7 +19,7 @@ Vue.use(EventBus);
 Vue.use(VueLocalStorage);
 Vue.prototype.$ver = '2018.6.28';
 
-let router = new VueRouter({routes:routes});
+let router = new VueRouter({mode: 'history', routes:routes});
 
 let vue = new Vue({
     el: '#app-main',
