@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
+import {Component, Prop} from 'vue-property-decorator';
 import {SoundComponent} from '../sound';
 import {SvgIconComponent} from "../../ui/svgicon";
 import './generator.scss';
@@ -35,7 +35,11 @@ class Card {
 })
 export class GeneratorComponent extends Vue {
 
+    @Prop(String) b: string;
+    @Prop(String) n: string;
+
     version: string = this.$ver;
+    opt_ver: string = '1';
     beats: number[] = [];
     beats_on: any = false;
     isAudio: boolean = true;
@@ -77,23 +81,55 @@ export class GeneratorComponent extends Vue {
 
         this.$translate.setTranslationModule('generator', this);
 
+
+        let options_query = this.checkQueryParams(this.b, this.n);
+
         // Load saved options from LocalStorage
-        if (this.$ls.get('ver') == this.version) {
-            let opt = this.$ls.get('options');
+        this.restoreOptions(options_query);
+    }
+
+    restoreOptions(options_query) {
+        let opt = this.$ls.get('options');
+
+        // Check version of options
+        if (this.$ls.get('ver') === this.opt_ver) {
             if (opt) {
                 this.options = opt;
             }
             else {
                 this.options = this.options_def;
-                this.$ls.set('options', this.options);
+            }
+            // Merge options with options from query params
+            this.options = this.merge(this.options, options_query);
+
+            // Get nums from query params
+            if (options_query["nums"]) {
+                this.nums = options_query["nums"];
+            } else {
+                this.nums = this.$ls.get('nums', []);
             }
 
-            this.nums = this.$ls.get('nums', []);
         } else {
-            this.options = this.options_def;
-            this.$ls.set('ver', this.version);
-            this.$ls.set('options', this.options);
+            // If versions does not equal, try to merge with defaults
+            if (opt) {
+                this.options = this.merge(this.options_def, opt);
+            }
+            else {
+                this.options = this.options_def;
+            }
+
+            // Merge options with options from query params
+            this.options = this.merge(this.options, options_query);
+
+            // Get nums from query params
+            if (options_query["nums"]) {
+                this.$ls.set('nums', options_query["nums"]);
+                this.nums = options_query["nums"];
+            }
+            this.$ls.set('ver', this.opt_ver);
         }
+
+        this.$ls.set('options', this.options);
     }
 
     mounted() {
@@ -115,18 +151,42 @@ export class GeneratorComponent extends Vue {
         });
 
         this.$watch('options.rock_step', (value) => {
-            if (value) {
+            if (value && this.options.evenness === 'no') {
                 this.nums[0] = 1;
                 this.nums[1] = 1;
                 this.rerender();
             }
         });
 
-        this.$watch(() => {
-            return this.options.bit_count + this.options.evenness
-        }, () => {
-            this.generate([]);
+        this.$watch('$route', (to, from) => {
+            let options_query = this.checkQueryParams(to.query.b, to.query.n);
+            if (options_query["nums"]) {
+                this.nums = options_query["nums"];
+            }
+            this.options = this.merge(this.options, options_query);
+            this.rerender();
         });
+
+        this.$watch(() => {
+            return this.options.evenness
+        }, () => {
+            if (this.options.evenness === 'no') {
+                this.rerender();
+            } else {
+                this.generate([]);
+            }
+        });
+
+        this.$watch(() => {
+            return this.options.bit_count
+        }, () => {
+            if (this.nums.length % this.options.bit_count === 0) {
+                this.rerender();
+            } else {
+                this.generate([]);
+            }
+        });
+
 
         this.$watch(() => {
             return `${this.options.couple}${this.options.kick_instead_hold}${this.options.show_triple}`
@@ -147,6 +207,47 @@ export class GeneratorComponent extends Vue {
 
     rerender(): void {
         this.generate(this.nums);
+    }
+
+    checkQueryParams(qb: string, qn: string): object {
+        let options = {
+            bit_count: 8,
+            rows: 1,
+            evenness: 'no',
+            syncopation: 0,
+            rock_step: false,
+            nums: []
+        };
+
+        let b, n;
+
+        if (qb) {
+            b = Number(qb);
+            if ([4, 6, 8].indexOf(b) === -1) {
+                b = 8;
+            }
+        }
+        if (qn) {
+            n = qn.split(',').map(Number);
+        }
+
+        // Check if query params is correct
+        if (n.length % b === 0) {
+            options.bit_count = b;
+            options.rows = n.length / b;
+            options.nums = n;
+            let s_count = n.filter(x => x === -1).length;
+            if (s_count > 0) {
+                if (s_count > b) {
+                    s_count = b;
+                }
+                options.syncopation = s_count;
+            }
+            return options;
+        } else {
+            return {};
+        }
+
     }
 
 
@@ -305,6 +406,7 @@ export class GeneratorComponent extends Vue {
 
         this.$ls.set('nums', num_arr);
 
+        this.$router.replace({path: 'generator', query: {b: options.bit_count.toString(), n: this.nums.toString()}});
     };
 
     getRandomNumber(num: number): number {
@@ -315,5 +417,21 @@ export class GeneratorComponent extends Vue {
         return arr[Math.floor(Math.random() * (arr.length))];
     };
 
+    merge(obj1: object, obj2: object): object {
+        let result = {};
+        let i;
+        for (i in obj1) {
+            if (obj1.hasOwnProperty(i)) {
+                result[i] = obj1[i];
+                if (obj2.hasOwnProperty(i) && typeof obj1[i] === typeof obj2[i]) {
+                    result[i] = obj2[i];
+                }
+                if ((i in obj2) && (typeof obj1[i] === "object") && (i !== null)) {
+                    obj1[i] = this.merge(obj1[i], obj2[i]);
+                }
+            }
+        }
 
+        return result;
+    };
 }

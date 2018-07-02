@@ -18,7 +18,7 @@ const ChangesComponent = () => import(
 const routes =  [
     /*{ path: '*',  redirect:{name: 'Generator'} },*/
     { path: '/',  redirect:{name: 'Generator'} },
-    { name: 'Generator', path: '/:lang?/generator',  component: GeneratorComponent },
+    { name: 'Generator', path: '/:lang?/generator',  component: GeneratorComponent, props: (route) => ({ b: route.query.b,  n: route.query.n}), canReuse: false },
     { name: 'Description', path: '/:lang?/description', component: DescriptionComponent },
     { name: 'Exercises', path: '/:lang?/exercises', component: ExercisesComponent },
     /*{ name: 'Changes', path: '/:lang?/changes', component: ChangesComponent },*/
