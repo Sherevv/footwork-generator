@@ -209,7 +209,7 @@ export class GeneratorComponent extends Vue {
         this.generate(this.nums);
     }
 
-    checkQueryParams(qb: string, qn: string): object {
+    checkQueryParams(qb, qn): object {
         let options = {
             bit_count: 8,
             rows: 1,
@@ -226,9 +226,13 @@ export class GeneratorComponent extends Vue {
             if ([4, 6, 8].indexOf(b) === -1) {
                 b = 8;
             }
+        }else{
+            return {};
         }
         if (qn) {
             n = qn.split(',').map(Number);
+        }else{
+            return {};
         }
 
         // Check if query params is correct
