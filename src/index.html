@@ -5,15 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=640">
-    <title property="og:title">Footwork Generator - variate your lindy hop basic!</title>
     <meta name="robots" content="all" />
-    <meta name="description" content="{{'META_DESCRIPTION' | translate}}" />
-    <meta property="og:description" content="The Footwork Generator for lindy hop dancers" />
-    <meta name="keywords" content = "{{'META_KEYWORDS' | translate}}" />
-    <meta property="og:image" content="http://fwg.it4t.ru/assets/images/preview.png" />
-    <meta property="og:url" content="http://fwg.it4t.ru/" />
-    <meta property="og:title" content="Footwork Generator - variate your lindy hop basic!" />
     <base href="/"/>
+    ${require('./partials/header.html')}
 </head>
 
 <body>
@@ -31,12 +25,10 @@
 
     <footer class="footer">
         <div class="infooter">
-            <a class="fork-me" href="https://github.com/Sherevv/footwork-generator" target="_blank" title="Fork me!"></a>
-            <it-socbtns></it-socbtns>
-            <p>Copyright &copy; 2015-2018 Footwork Generator - Designed by <a href="http://it4t.ru/"
-                                                                              target="_blank">it4t.ru</a></p>
+            ${require('./partials/infooter.html')}
         </div>
     </footer>
 </div>
+${require('./partials/counters.html')}
 </body>
 </html>
