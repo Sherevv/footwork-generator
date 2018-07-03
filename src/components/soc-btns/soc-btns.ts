@@ -10,6 +10,9 @@ import {Component} from 'vue-property-decorator';
     }
 })
 export class SocBtnsComponent extends Vue {
+
+    url: string = 'https://fwg.it4t.ru';
+
     mounted() {
         let script = document.createElement('script');
         script.onload = () => {
@@ -23,35 +26,72 @@ export class SocBtnsComponent extends Vue {
     showBtns() {
 
         let content = {
-            url: 'http://fwg.it4t.ru/',
-            title: 'Генератор Футворка - внеси разнообразие в свой линди хоп бейсик!',
-            description: 'Генератор Футворка для танцоров линди хопа.',
-            image: 'http://fwg.it4t.ru/assets/images/preview.png'
+            ru: {
+                url: this.url,
+                title: 'Генератор Футворка - внеси разнообразие в свой линди хоп бейсик!',
+                description: 'Генератор Футворка для танцоров линди хопа.',
+                image: this.url + '/assets/images/preview.png'
+            },
+            en: {}
         };
         let theme = {
-            services: 'facebook,vkontakte,telegram,twitter,lj,odnoklassniki,moimir,gplus,viber,whatsapp,pinterest,reddit,digg,linkedin,evernote',
-            limit: 4,
-            lang: 'ru',
-            size: 'm',
-            popupDirection: 'top',
-            popupPosition: 'outer'
+            ru: {
+                services: 'facebook,vkontakte,telegram,twitter,lj,odnoklassniki,moimir,gplus,viber,whatsapp,pinterest,reddit,digg,linkedin,evernote',
+                limit: 4,
+                lang: 'ru',
+                size: 'm',
+                popupDirection: 'top',
+                popupPosition: 'outer'
+            },
+            en: {}
+        };
+
+        content.en = Object.assign({}, content.ru);
+        content.en['title'] = 'Footwork Generator - variate your lindy hop basic!';
+        content.en['description'] = 'The Footwork Generator for lindy hop dancers.';
+
+        theme.en = Object.assign({}, theme.ru);
+        theme.en['lang'] = 'en';
+
+        let share = {
+            ru: {},
+            en: {}
         };
 
         try {
-            Ya.share2('ya-share-ru', {
-                content,
-                theme
+            this.setContentUrl(content[this.$route.params.lang]);
+
+            share.ru = Ya.share2('ya-share-ru', {
+                content: content.ru,
+                theme: theme.ru
             });
 
-            content['title'] = 'Footwork Generator - variate your lindy hop basic!';
-            content['description'] = 'The Footwork Generator for lindy hop dancers.';
-            theme['lang'] = 'en';
-
-
-            Ya.share2('ya-share-en', {
-                content,
-                theme
+            share.en = Ya.share2('ya-share-en', {
+                content: content.en,
+                theme: theme.en
             });
-        }catch (e) {}
+
+            this.$watch('$route', (to, from) => {
+                this.setContentUrl(content[to.params.lang]);
+                this.updateContent(share[to.params.lang], content[to.params.lang]);
+                console.log(to);
+            });
+        } catch (e) {
+        }
+
+    }
+
+    setContentUrl(content) {
+        if ('url' in content) {
+            if (this.$route.name === 'Generator') {
+                content.url = this.url + this.$route.fullPath;
+            } else {
+                content.url = this.url;
+            }
+        }
+    }
+
+    updateContent(share, content) {
+        share.updateContent(content);
     }
 }
