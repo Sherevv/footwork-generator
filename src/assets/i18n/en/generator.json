@@ -25,5 +25,8 @@
   "Sound_Error": "Sorry, we can not play the sound in your browser. Try a different browser or check if you have Flash.",
   "Steps": "Steps",
   "kick_instead_hold": "kick instead hold",
-  "Manual_mode": "manual mode"
+  "Manual_mode": "manual mode",
+  "copied": "Copied!",
+  "press_CTRL+C": "Press CTRL+C to copy",
+  "Share_rhythm": "Share rhythm"
 }

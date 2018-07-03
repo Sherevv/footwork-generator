@@ -38,6 +38,8 @@ export class GeneratorComponent extends Vue {
     @Prop(String) b: string;
     @Prop(String) n: string;
 
+    copySucceeded = null;
+    shareLink: string = '';
     version: string = this.$ver;
     opt_ver: string = '1';
     beats: number[] = [];
@@ -75,6 +77,7 @@ export class GeneratorComponent extends Vue {
         new Card(-1, 'green', 'STep', '', 'S'),
     ];
     cards = [];
+    isShowShareLink: boolean = false;
 
 
     created() {
@@ -86,6 +89,8 @@ export class GeneratorComponent extends Vue {
 
         // Load saved options from LocalStorage
         this.restoreOptions(options_query);
+
+        this.setSharedLink(this.$route.fullPath);
     }
 
     restoreOptions(options_query) {
@@ -159,12 +164,15 @@ export class GeneratorComponent extends Vue {
         });
 
         this.$watch('$route', (to, from) => {
+            console.log(to);
             let options_query = this.checkQueryParams(to.query.b, to.query.n);
             if (options_query["nums"]) {
                 this.nums = options_query["nums"];
             }
             this.options = this.merge(this.options, options_query);
             this.rerender();
+
+            this.setSharedLink(to.fullPath);
         });
 
         this.$watch(() => {
@@ -226,12 +234,12 @@ export class GeneratorComponent extends Vue {
             if ([4, 6, 8].indexOf(b) === -1) {
                 b = 8;
             }
-        }else{
+        } else {
             return {};
         }
         if (qn) {
             n = qn.split(',').map(Number);
-        }else{
+        } else {
             return {};
         }
 
@@ -412,6 +420,61 @@ export class GeneratorComponent extends Vue {
 
         this.$router.replace({path: 'generator', query: {b: options.bit_count.toString(), n: this.nums.toString()}});
     };
+
+    toggleShareRhythm() {
+        this.isShowShareLink = !this.isShowShareLink;
+        if (this.isShowShareLink) {
+            setTimeout(() => {
+                let el = this.$refs.sharedLink["$refs"].input;
+                if (el) {
+                    el.focus();
+                    if (el.setSelectionRange) {
+                        el.setSelectionRange(0, this.shareLink.length);
+                    } else if (el.createTextRange) {
+                        let range = el.createTextRange();
+                        range.collapse(true);
+                        range.moveEnd('character', this.shareLink.length);
+                        range.moveStart('character', 0);
+                        range.select();
+                    } else if (el.selectionStart) {
+                        el.selectionStart = 0;
+                        el.selectionEnd = this.shareLink.length;
+                    }
+                }
+            }, 0);
+
+        } else {
+            window.getSelection().removeAllRanges();
+        }
+    }
+
+    setSharedLink(path) {
+        this.shareLink = window.location.origin + path;
+    }
+
+    copyLink() {
+        this.$copyText(this.shareLink).then((e) => {
+            if (process.env.NODE_ENV !== 'production') {
+                console.log(e);
+            }
+            this.handleCopyStatus(true);
+
+            let t = setTimeout(
+                this.handleCopyStatus
+                , 2000);
+        }, (e) => {
+            if (process.env.NODE_ENV !== 'production') {
+                console.log(e);
+            }
+            this.handleCopyStatus(false);
+        });
+
+        this.$refs.sharedLink["$refs"].input.select();
+    }
+
+    handleCopyStatus(status) {
+        this.copySucceeded = status;
+    }
 
     getRandomNumber(num: number): number {
         return (Math.ceil(Math.random() * num));

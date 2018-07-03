@@ -13,5 +13,6 @@ declare module "vue/types/vue" {
     interface Vue {
         $ls: any;
         $ver: string;
+        $copyText: any;
     }
 }

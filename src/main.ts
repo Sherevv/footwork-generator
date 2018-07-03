@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import EventBus from './plugins/event-bus';
 import VueTranslate from './plugins/vue-translate';
 import VueLocalStorage from 'vue-ls';
+import VueClipboard from 'vue-clipboard2'
 import routes from './routes';
 import './styles/styles.scss';
 import './element-ui.js';
@@ -11,6 +12,7 @@ import {NavbarComponent} from './components/navbar';
 import {SocBtnsComponent} from './components/soc-btns';
 
 // register plugins
+Vue.use(VueClipboard);
 Vue.use(VueRouter);
 Vue.use(VueTranslate, {
     langs: ['en', 'ru']

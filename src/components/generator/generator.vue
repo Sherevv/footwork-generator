@@ -4,7 +4,9 @@
         <div class="cards">
             <div v-for="(card, i) in cards" class="card-block" :class="['row' + options.bit_count]">
                 <div v-if="options.show_bits" class="card-index"><span class="badge">{{i + 1}}</span></div>
-                <div v-if="i%options.bit_count === 0 && options.show_row_index" class="row-index">{{Math.floor((i+1)/options.bit_count)+1}}</div>
+                <div v-if="i%options.bit_count === 0 && options.show_row_index" class="row-index">
+                    {{Math.floor((i+1)/options.bit_count)+1}}
+                </div>
                 <div class="card" :class="card.style">{{card.num_string}}</div>
                 <div v-if="options.step_names" class="card-lbl" :class="card.label_class">{{card.step}}</div>
                 <div v-if="options.manual_mode">
@@ -40,10 +42,23 @@
             </div>
             <button class="btn btn-general btn-warning btn-lg generator-btn" @click="generate([])">{{t('Generate')}}
             </button>
+            <div class="share-btn">
+                <el-button @click="toggleShareRhythm()" :title="t('Share_rhythm')">
+                    <it-svgicon icon="share" icon-class="icon-btn"></it-svgicon>
+                </el-button>
+            </div>
+            <div v-show="isShowShareLink" class="link-copy-block">
+                <div class="container">
+                    <el-input type="text" ref="sharedLink" autofocus="true" class="form-control sharedLink" v-model="shareLink">
+                        <el-button slot="append" type="success" @click="copyLink()">
+                            <it-svgicon icon="copy"></it-svgicon>
+                        </el-button>
+                    </el-input>
+                </div>
+                <p v-if="copySucceeded">{{t('copied')}}</p>
+                <p v-if="copySucceeded === false">{{t('press_CTRL+C')}}</p>
+            </div>
         </div>
-
-
-
     </div>
 
 
@@ -189,6 +204,12 @@
             </symbol>
             <symbol id="icon-minus" viewBox="0 0 100 100">
                 <rect height="40" width="100" x="0" y="30"/>
+            </symbol>
+            <symbol id="icon-share" viewBox="0 0 24 24">
+                <path d="M 20 0 C 17.789063 0 16 1.789063 16 4 C 16 4.277344 16.039063 4.550781 16.09375 4.8125 L 7 9.375 C 6.265625 8.535156 5.203125 8 4 8 C 1.789063 8 0 9.789063 0 12 C 0 14.210938 1.789063 16 4 16 C 5.203125 16 6.265625 15.464844 7 14.625 L 16.09375 19.1875 C 16.039063 19.449219 16 19.722656 16 20 C 16 22.210938 17.789063 24 20 24 C 22.210938 24 24 22.210938 24 20 C 24 17.789063 22.210938 16 20 16 C 18.796875 16 17.734375 16.535156 17 17.375 L 7.90625 12.8125 C 7.960938 12.550781 8 12.277344 8 12 C 8 11.722656 7.960938 11.449219 7.90625 11.1875 L 17 6.625 C 17.734375 7.464844 18.796875 8 20 8 C 22.210938 8 24 6.210938 24 4 C 24 1.789063 22.210938 0 20 0 Z "/>
+            </symbol>
+            <symbol id="icon-copy" viewBox="0 0 1000 1000">
+                <g><path d="M691,160.8V10H269.5C206.3,72.6,143.1,135.2,80,197.8v641.4h227.9V990H920V160.8H691z M269.5,64.4v134.4H133.1C178.5,154,224,109.2,269.5,64.4z M307.9,801.2H117.5V236.8h190.5V47.9h344.5v112.9h-154c-63.5,62.9-127,125.9-190.5,188.8V801.2z M499.5,215.2v134.5H363.1v-1c45.1-44.5,90.2-89,135.3-133.5L499.5,215.2z M881.5,952h-535V386.6H538V198.8h343.5V952z"/></g>
             </symbol>
         </defs>
     </svg>
