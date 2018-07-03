@@ -74,7 +74,6 @@ export class SocBtnsComponent extends Vue {
             this.$watch('$route', (to, from) => {
                 this.setContentUrl(content[to.params.lang]);
                 this.updateContent(share[to.params.lang], content[to.params.lang]);
-                console.log(to);
             });
         } catch (e) {
         }
