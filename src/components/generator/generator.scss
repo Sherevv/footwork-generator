@@ -1,6 +1,54 @@
+.generator {
+  width: 500px;
+  margin: 0 auto;
+}
+
+.generator-btn {
+  display: inline-block;
+  margin-top: 20px;
+  vertical-align: text-bottom;
+
+  button {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 15px;
+  }
+  span {
+    vertical-align: center;
+  }
+}
+
+.info {
+  clear: both;
+  text-align: left;
+  margin-top: 20px;
+  .el-collapse-item__arrow {
+    line-height: 48px;
+  }
+
+  .el-collapse-item__header,
+  .el-collapse-item__content {
+    padding-left: 20px;
+    padding-right: 10px;
+    font-size: 14px;
+  }
+  .el-collapse-item__header {
+    background-color: #fcfcfc;
+    font-size: 16px;
+  }
+
+  .el-collapse {
+    border: 3px solid #dedede;
+  }
+
+  .card {
+    float: none;
+  }
+}
+
 .add-row-btn, .del-row-btn {
   float: right;
-  margin-top: 25px;
+  margin-top: 22px;
   margin-right: 70px;
   position: absolute;
   right: 0;
@@ -14,14 +62,14 @@
   clear: both;
 }
 
-.share-btn{
+.share-btn {
   display: inline-block;
   vertical-align: bottom;
   padding-bottom: 6px;
   margin-left: 15px;
 }
 
-.link-copy-block{
+.link-copy-block {
   margin-top: 10px;
 }
 
