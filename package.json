@@ -1,7 +1,7 @@
 {
   "name": "footwork-generator",
   "description": "The Footwork Generator for swing dancers",
-  "version": "2018.6.28",
+  "version": "2018.7.3",
   "author": "fwg@it4t.ru",
   "private": true,
   "scripts": {
@@ -41,6 +41,7 @@
     "html-webpack-plugin": "^3.2.0",
     "json-loader": "^0.5.7",
     "node-sass": "^4.9.0",
+    "prerender-spa-plugin": "^3.2.1",
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
