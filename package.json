@@ -17,6 +17,7 @@
     "vue": "^2.5.16",
     "vue-class-component": "^6.2.0",
     "vue-clipboard2": "^0.2.0",
+    "vue-headful": "^2.0.1",
     "vue-ls": "^3.1.0",
     "vue-markdown": "^2.2.4",
     "vue-property-decorator": "^7.0.0",

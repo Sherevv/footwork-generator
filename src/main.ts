@@ -3,7 +3,8 @@ import VueRouter from 'vue-router';
 import EventBus from './plugins/event-bus';
 import VueTranslate from './plugins/vue-translate';
 import VueLocalStorage from 'vue-ls';
-import VueClipboard from 'vue-clipboard2'
+import VueClipboard from 'vue-clipboard2';
+import vueHeadful from 'vue-headful';
 import routes from './routes';
 import './styles/styles.scss';
 import './element-ui.js';
@@ -19,6 +20,7 @@ Vue.use(VueTranslate, {
 Vue.use(EventBus);
 Vue.use(VueLocalStorage);
 Vue.prototype.$ver = '2018.7.3';
+Vue.component('vue-headful', vueHeadful);
 
 let router = new VueRouter({mode: 'history', routes:routes});
 

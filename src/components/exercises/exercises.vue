@@ -328,4 +328,6 @@
             </el-collapse-item>
         </el-collapse>
     </div>
+
+    <vue-headful :title="t('Exercises') + ' | ' + t('TITLE')" :lang="$route.params.lang" :description="t('META_DESCRIPTION')" :keywords="t('META_KEYWORDS')"/>
 </div>
