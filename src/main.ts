@@ -7,9 +7,8 @@ import VueClipboard from 'vue-clipboard2'
 import routes from './routes';
 import './styles/styles.scss';
 import './element-ui.js';
+import {App} from './components/app';
 
-import {NavbarComponent} from './components/navbar';
-import {SocBtnsComponent} from './components/soc-btns';
 
 // register plugins
 Vue.use(VueClipboard);
@@ -26,8 +25,9 @@ let router = new VueRouter({mode: 'history', routes:routes});
 let vue = new Vue({
     el: '#app-main',
     router: router,
-    components: {
-        'it-navbar': NavbarComponent,
-        'it-socbtns': SocBtnsComponent
+    render: h => h(App),
+    mounted(){
+        // For prerender plugin
+        document.dispatchEvent(new Event('vue-post-render'));
     }
 });
