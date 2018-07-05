@@ -1,6 +1,8 @@
 <div class="content-div">
     <h1 class="page-heading" v-translate>Exercises</h1>
     <p v-translate>Exercises_desc</p>
+    <p><span v-translate>Exercises_desc_2</span><it-generate-btn b="8" n="1,1,1,2,1,1,1,2"></it-generate-btn></p>
+    <p v-translate>Exercises_desc_3</p>
     <el-button @click="unCollapseAccordion()" v-translate>Expand_all</el-button>
     <el-button @click="collapseAccordion()" v-translate>Collapse_all</el-button>
     <div class="accordion-block">
