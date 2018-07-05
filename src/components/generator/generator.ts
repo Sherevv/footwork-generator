@@ -164,7 +164,6 @@ export class GeneratorComponent extends Vue {
         });
 
         this.$watch('$route', (to, from) => {
-            console.log(to);
             let options_query = this.checkQueryParams(to.query.b, to.query.n);
             if (options_query["nums"]) {
                 this.nums = options_query["nums"];
