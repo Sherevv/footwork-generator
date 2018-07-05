@@ -106,6 +106,37 @@
         </div>
     </div>
 
+    <h3 v-translate>Description_syncopation</h3>
+    <div v-html="t('Description_sync_1')"></div>
+    <p><span class="card green card-sm">S</span> - <span v-translate>Description_sync_2</span> <span class="card red card-sm">2</span></p>
+    <div class="cards-block-sm">
+        <div class="card-block">
+            <span class="card blue">1</span>
+
+            <div class="card-lbl">step</div>
+            <div class="card-lbl left-lbl">rock</div>
+        </div>
+        <div class="card-block">
+            <span class="card blue">1</span>
+
+            <div class="card-lbl">step</div>
+            <div class="card-lbl right-lbl">step</div>
+        </div>
+        <div class="card-block">
+            <span class="card green">S</span>
+
+            <div class="card-lbl">STep</div>
+            <div class="card-lbl left-lbl">TRIple</div>
+        </div>
+        <div class="card-block">
+            <span class="card red">2</span>
+
+            <div class="card-lbl">bllch</div>
+            <div class="card-lbl right-lbl">step</div>
+        </div>
+    </div>
+    <p v-html="t('Description_sync_3')"></p>
+
     <h3 v-translate>Description_how_it_works</h3>
     <div v-html="t('Description_hiw_1')"></div>
 
