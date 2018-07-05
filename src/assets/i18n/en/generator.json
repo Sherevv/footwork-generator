@@ -28,5 +28,14 @@
   "Manual_mode": "manual mode",
   "copied": "Copied!",
   "press_CTRL+C": "Press CTRL+C to copy",
-  "Share_rhythm": "Share rhythm"
+  "Share_rhythm": "Share rhythm",
+  "Slider_message_40":"Sleepily..",
+  "Slider_message_60":"Good pulse",
+  "Slider_message_100":"Blues night",
+  "Slider_message_130":"Slow tempo",
+  "Slider_message_160":"Medium tempo",
+  "Slider_message_190":"Fast",
+  "Slider_message_220":"Faster, even faster!",
+  "Slider_message_270":"Balboa!",
+  "Slider_message_300":"Dance floor in the fire!!!"
 }

@@ -60,6 +60,8 @@ export class SoundComponent extends Vue {
     isPlayAccent = false;
     accentBit = 8;
 
+    sliderMessage:string = '';
+
 
     setupAudioContext(): void {
         try {
@@ -98,6 +100,7 @@ export class SoundComponent extends Vue {
 
         this.$watch('bpm', debounce((bpmNew: number) => {
                 this.rate = 60000 / bpmNew;
+                this.updateSliderMessage(bpmNew);
                 this.updateSound();
             }, 300)
         );
@@ -115,6 +118,8 @@ export class SoundComponent extends Vue {
         this.$bus.$on('stopPlayDown', () => {
             this.stop();
         });
+
+        this.updateSliderMessage(this.bpm);
     }
 
     loadSource() {
@@ -354,5 +359,27 @@ export class SoundComponent extends Vue {
         let frameCount = this.audioContext.sampleRate * rate;
         let emptyBuffer = this.audioContext.createBuffer(1, frameCount, this.audioContext.sampleRate);
         return emptyBuffer;
+    }
+
+    updateSliderMessage(bpm){
+        if(bpm<=40){
+            this.sliderMessage = 'Slider_message_40';
+        }else if(bpm<=60){
+            this.sliderMessage = 'Slider_message_60';
+        }else if(bpm<=100){
+            this.sliderMessage = 'Slider_message_100';
+        }else if(bpm<=130){
+            this.sliderMessage = 'Slider_message_130';
+        }else if(bpm<=160){
+            this.sliderMessage = 'Slider_message_160';
+        }else if(bpm<=190){
+            this.sliderMessage = 'Slider_message_190';
+        }else if(bpm<=220){
+            this.sliderMessage = 'Slider_message_220';
+        }else if(bpm<=270){
+            this.sliderMessage = 'Slider_message_270';
+        }else if(bpm<=300){
+            this.sliderMessage = 'Slider_message_300';
+        }
     }
 }

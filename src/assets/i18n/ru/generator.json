@@ -28,5 +28,14 @@
   "Manual_mode": "ручной режим",
   "copied": "Ссылка скопирована!",
   "press_CTRL+C": "Нажмите CTRL+C, чтобы скопировать ссылку",
-  "Share_rhythm": "Поделиться ритмом"
+  "Share_rhythm": "Поделиться ритмом",
+  "Slider_message_40":"Что-то спать хочется..",
+  "Slider_message_60":"Хороший пульс",
+  "Slider_message_100":"Блюзнайт",
+  "Slider_message_130":"Медленный темп",
+  "Slider_message_160":"Средний темп",
+  "Slider_message_190":"Шустро",
+  "Slider_message_220":"Быстрее, еще быстрее!",
+  "Slider_message_270":"О, бальбоа!",
+  "Slider_message_300":"Танцпол в огне!!!"
 }

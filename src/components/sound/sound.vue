@@ -28,11 +28,15 @@
     <div class="slider-div">
         <label class="slider-label">
             {{t('Tempo')}}
-            <div class="slider">
-                {{ bpm }}
-                <el-slider v-model="bpm" :max="300" :min="30">
-                </el-slider>
-            </div>
         </label>
+        <div class="slider-bpm">{{ bpm }}</div>
+        <div class="slider">
+            <el-slider v-model="bpm" :max="300" :min="30">
+            </el-slider>
+            <div class="slider-start">30</div>
+            <div class="slider-end">300</div>
+        </div>
+        <div class="slider-message">{{t(sliderMessage)}}</div>
+
     </div>
 </div>
