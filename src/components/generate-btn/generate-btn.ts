@@ -14,6 +14,6 @@ export class GenerateBtnComponent extends Vue {
     @Prop(String) n: string;
 
     goToGenerator() {
-        this.$router.push({name: "Generator", query: {b: this.b, n: this.n}});
+        this.$router.push({name: "Generator", params: {lang: this.$translate.lang()}, query: {b: this.b, n: this.n}});
     }
 }
