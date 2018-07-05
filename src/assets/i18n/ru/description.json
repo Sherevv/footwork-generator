@@ -1,5 +1,6 @@
 {
   "Description": "Описание",
+  "Description_meta_description": "Описание основных настроек генератора и рекомендации по использованию",
   "Description_1": "Условно у нас есть три вида действия в каждый бит: hold (0, белая карточка), step (1, синяя карточка) и ball-change (2, красная карточка).",
   "Description_2": "отсутствие переноса веса: hold, kick, eagle slide, touch",
   "Description_3": "один перенос веса, один шаг: step, jump, down",

@@ -1,5 +1,6 @@
 {
   "Description": "Description",
+  "Description_meta_description": "Description of the generator settings and usage recommendations",
   "Description_1": "Conventionally, we have three different actions we can do to every count: hold (0, white card), step (1, blue card) and ball-change (2, red card).",
   "Description_2": "no weight transfer: hold, kick, eagle slide, touch",
   "Description_3": "one weight transfer, one step: step, jump, down",

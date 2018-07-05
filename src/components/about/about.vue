@@ -28,5 +28,5 @@
             </symbol>
         </defs>
     </svg>
-    <vue-headful :title="t('About') + ' | ' + t('TITLE')" :lang="$route.params.lang" :description="t('META_DESCRIPTION')" :keywords="t('META_KEYWORDS')"/>
+    <vue-headful :title="t('About') + ' | ' + t('TITLE')" :lang="$route.params.lang" :description="t('About_meta_description')"/>
 </div>

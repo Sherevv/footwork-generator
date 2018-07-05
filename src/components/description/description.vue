@@ -111,5 +111,5 @@
 
     <h3 v-translate>Description_settings</h3>
     <div v-html="t('Description_settings_1')"></div>
-    <vue-headful :title="t('Description') + ' | ' + t('TITLE')" :lang="$route.params.lang" :description="t('META_DESCRIPTION')" :keywords="t('META_KEYWORDS')"/>
+    <vue-headful :title="t('Description') + ' | ' + t('TITLE')" :lang="$route.params.lang" :description="t('Description_meta_description')"/>
 </div>
