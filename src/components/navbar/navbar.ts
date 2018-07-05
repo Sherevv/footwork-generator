@@ -28,7 +28,7 @@ export class NavbarComponent extends Vue {
         }else{
             if (this.$route.name) {
                 let lang = this.$ls.get('lang');
-                if (! (lang && this.$translate.langs.indexOf(lang) > -1)){
+                if (! (lang && this.$translate.langs.indexOf(lang) !== -1)){
                     lang = this.$translate.fallback;
                 }
                 this.$router.push({name: this.$route.name, params: {lang: lang}});
