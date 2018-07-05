@@ -1,7 +1,7 @@
 {
   "name": "footwork-generator",
   "description": "The Footwork Generator for swing dancers",
-  "version": "2018.7.3",
+  "version": "2018.7.5",
   "author": "fwg@it4t.ru",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "debounce": "^1.1.0",
-    "element-ui": "^2.4.2",
+    "element-ui": "^2.4.3",
     "vue": "^2.5.16",
     "vue-class-component": "^6.2.0",
     "vue-clipboard2": "^0.2.0",
@@ -42,7 +42,7 @@
     "html-minifier": "^3.5.18",
     "html-webpack-plugin": "^3.2.0",
     "json-loader": "^0.5.7",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.9.1",
     "prerender-spa-plugin": "^3.2.1",
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.0.3",
@@ -52,7 +52,7 @@
     "url-loader": "^1.0.1",
     "vue-loader": "^15.2.4",
     "vue-template-compiler": "^2.5.16",
-    "webpack": "^4.14.0",
+    "webpack": "^4.15.0",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4",
