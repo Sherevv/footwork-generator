@@ -19,7 +19,7 @@ Vue.use(VueTranslate, {
 });
 Vue.use(EventBus);
 Vue.use(VueLocalStorage);
-Vue.prototype.$ver = '2018.7.5';
+Vue.prototype.$ver = '2018.7.6';
 Vue.component('vue-headful', vueHeadful);
 
 let router = new VueRouter({mode: 'history', routes:routes});
