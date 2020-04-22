@@ -7,12 +7,11 @@
     <meta name="viewport" content="width=640">
     <meta name="robots" content="all" />
     <base href="/"/>
-    ${require('./partials/header.html')}
+    <%- require('./partials/header.ejs')() %>
 </head>
 
 <body>
 <div id="app-main">Loading..</div>
-
-${require('./partials/counters.html')}
+<%- require('./partials/counters.ejs')() %>
 </body>
 </html>
