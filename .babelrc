@@ -1,11 +1,13 @@
 {
   "presets": [
-    ["es2015", { "modules": false }]
+    ["@babel/env", { "modules": false,
+      "targets": "> 0.25%, not dead"
+    }, "@babel/plugin-proposal-decorators"]
   ],
-  "plugins": [["component", [
+  "plugins": [["component",
     {
       "libraryName": "element-ui",
       "styleLibraryName": "theme-chalk"
     }
-  ]]]
+  ]]
 }
