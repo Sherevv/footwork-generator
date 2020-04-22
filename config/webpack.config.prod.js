@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const baseWebpackConfig = require('./webpack.config.base.js');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -12,7 +12,7 @@ const helpers = require('./helpers');
 let plugins = [
     new HtmlWebpackPlugin({
         inject: true,
-        template: helpers.root('/src/index.html'),
+        template: helpers.root('/src/index.ejs'),
         favicon: helpers.root('/src/assets/favicon.ico'),
         minify: {
             removeComments: true,
@@ -57,11 +57,7 @@ let plugins = [
 
 if (process.env.BUILD_ENV === 'yes') {
     plugins.push(
-        new CleanWebpackPlugin([helpers.root('/dist')], {
-            root: helpers.root('/'),
-            verbose: true,
-            dry: false,
-        }),
+        new CleanWebpackPlugin(),
     );
 }
 

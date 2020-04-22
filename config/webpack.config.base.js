@@ -18,6 +18,7 @@ module.exports = {
             'Assets$': path.resolve(__dirname, '../src/assets'),
         }
     },
+
     devServer:
         {
             port: 8080,
@@ -36,9 +37,19 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.m?js$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader'
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            },
+            {
+                test: /\.vue$/,
+                exclude: /node_modules/,
+                loader: ['html-loader']
             },
             {
                 test: /\.ts$/,
@@ -49,9 +60,8 @@ module.exports = {
                 }
             },
             {
-                test: /\.vue$/,
-                exclude: /node_modules/,
-                loader: 'raw-loader'
+                test: /\.ejs$/i,
+                loader: 'ejs-easy-loader'
             },
             {
                 test: /\.html$/,
@@ -59,7 +69,7 @@ module.exports = {
                     loader: 'html-loader',
                     options: {
                         minimize: false,
-                        interpolate: true
+                        //interpolate: true
                     }
                 }]
             },
