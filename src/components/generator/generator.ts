@@ -417,7 +417,11 @@ export class GeneratorComponent extends Vue {
 
         this.$ls.set('nums', num_arr);
 
-        this.$router.push({path: 'generator', query: {b: options.bit_count.toString(), n: this.nums.toString()}});
+        this.$router.push({path: 'generator', query: {b: options.bit_count.toString(), n: this.nums.toString()}}).catch(error => {
+            if (error.name != "NavigationDuplicated") {
+                throw error;
+            }
+        });
     };
 
     toggleShareRhythm() {

@@ -45,7 +45,11 @@ export class NavbarComponent extends Vue {
     changeLanguage(lang:string) {
         this.$translate.setLang(lang);
         this.$ls.set('lang', lang);
-        this.$router.replace({name: this.$route.name, params: {lang: lang}});
+        this.$router.replace({name: this.$route.name, params: {lang: lang}}).catch(error => {
+            if (error.name != "NavigationDuplicated") {
+                throw error;
+            }
+        });
     }
 
     localizePath(name:string) {
