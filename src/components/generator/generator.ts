@@ -164,6 +164,7 @@ export class GeneratorComponent extends Vue {
         });
 
         this.$watch('$route', (to, from) => {
+
             let options_query = this.checkQueryParams(to.query.b, to.query.n);
             if (options_query["nums"]) {
                 this.nums = options_query["nums"];
@@ -282,7 +283,6 @@ export class GeneratorComponent extends Vue {
     }
 
     generate(nums: number[]): void {
-
         if (process.env.NODE_ENV !== 'production') {
             console.log('generate!');
             console.log(nums);
@@ -369,7 +369,7 @@ export class GeneratorComponent extends Vue {
 
             let k = (num > -1) ? num : 3;
             let card = {...this.classes[k]};
-            if (num === 0 && options.kick_instead_hold == true)
+            if (num === 0 && options.kick_instead_hold)
                 card.step = 'kick';
             cards[i] = card;
 
