@@ -1,5 +1,5 @@
 <a class="fork-me" href="https://github.com/Sherevv/footwork-generator" target="_blank" title="Fork me!"></a>
 
 <it-socbtns></it-socbtns>
-<p>Copyright &copy; 2015-2018 Footwork Generator - Designed by <a href="http://it4t.ru/"
+<p>Copyright &copy; 2015-2020 Footwork Generator - Designed by <a href="http://it4t.ru/"
                                                                   target="_blank">it4t.ru</a></p>
