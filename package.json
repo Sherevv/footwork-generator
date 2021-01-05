@@ -11,7 +11,7 @@
     "start:prod": "cross-env NODE_ENV=production webpack-dev-server --mode production --config config/webpack.config.prod.js"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "debounce": "^1.2.0",
     "element-ui": "^2.13.1",
     "vue": "^2.6.11",
