@@ -1,1 +1,1 @@
-export * from './sound';
+export { default } from "./sound.vue" ;

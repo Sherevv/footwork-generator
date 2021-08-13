@@ -1,44 +1,47 @@
-import Vue from 'vue';
-import {Component, Prop, Watch} from 'vue-property-decorator';
-import AudioSampleLoader from '../../lib/AudioSampleLoader.js';
 import debounce from 'debounce';
-import {SvgIconComponent} from '../../ui/svgicon';
-import './sound.scss';
+import { Vue, Options, Prop, Watch } from 'vue-property-decorator';
+import AudioSampleLoader from '@/lib/AudioSampleLoader.js';
+import SvgIconComponent from '@/ui/svgicon';
 
-@Component({
-    template: require('./sound.vue'),
-    props: ['options', 'beats', 'isA', 'swOffClr'],
-    data() {
-        return {
-            isAudio: this.$props.isA,
-            soundType: this.$props.options.sound.soundType,
-            bpm: this.$props.options.sound.bpm,
-            isPlayAccent: this.$props.options.sound.isPlayAccent,
-            accentBit: this.$props.options.sound.accentBit
-        }
-    },
+@Options({
     beforeDestroy() {
         // Clear listeners
-        this.$bus.$off(['updatePlayDown', 'stopPlayDown']);
+        this.$bus.$off('updatePlayDown');
+        this.$bus.$off('stopPlayDown');
     },
     components: {
         'it-svgicon': SvgIconComponent
     },
 })
-export class SoundComponent extends Vue {
+export default class SoundComponent extends Vue {
     mounted() {
         this.initSound();
     }
 
+    beforeUnmount() {
+        this.stop();
+        this.$bus.$emit('updatePlayUp', false);
+        this.$bus.$off('updatePlayDown');
+        this.$bus.$off('stopPlayDown');
+    }
+
+    @Prop()
     options: any;
-    beats_on: boolean = false;
+    @Prop()
+    isA: any;
     @Prop()
     beats: number[];
-    isAudio: boolean = false;
+    @Prop()
+    swOffClr: any;
 
-    rate = 60000 / this.options.sound.bpm;
+    // @Prop()
+    beats_on = false;
+    is_sound_init = false;
 
-    isWebAudioAPI: boolean = true;
+
+    isAudio = false;
+
+    isWebAudioAPI = true;
 
     metronomeBufferSource: any = null;
     metronomeSource: any = null;
@@ -59,15 +62,16 @@ export class SoundComponent extends Vue {
     bpm = 130;
     isPlayAccent = false;
     accentBit = 8;
+    rate = 60000 / this.bpm;
 
-    sliderMessage:string = '';
+    sliderMessage = '';
 
 
     setupAudioContext(): void {
         try {
-            AudioContext = AudioContext || webkitAudioContext;
+            const audioContext = AudioContext || webkitAudioContext;
             if (typeof AudioContext !== 'undefined') {
-                this.audioContext = new AudioContext();
+                this.audioContext = new audioContext();
             } else {
                 this.isWebAudioAPI = false;
             }
@@ -78,8 +82,8 @@ export class SoundComponent extends Vue {
 
 
     setupCodecs(): void {
-        let audioTest = new Audio();
-        let mpegTest = audioTest.canPlayType('audio/mpeg;').replace(/^no$/, '');
+        const audioTest = new Audio();
+        const mpegTest = audioTest.canPlayType('audio/mpeg;').replace(/^no$/, '');
         this.codecs = {
             mp3: !!(mpegTest || audioTest.canPlayType('audio/mp3;').replace(/^no$/, '')),
             ogg: !!audioTest.canPlayType('audio/ogg; codecs="vorbis"').replace(/^no$/, ''),
@@ -88,6 +92,13 @@ export class SoundComponent extends Vue {
     }
 
     initSound(): void {
+
+        this.isAudio = this.isA
+        this.soundType = this.options.sound.soundType
+        this.bpm = this.options.sound.bpm
+        this.isPlayAccent = this.options.sound.isPlayAccent
+        this.accentBit = this.options.sound.accentBit
+        this.rate = 60000 / this.bpm;
 
         this.setupAudioContext();
         if (this.isWebAudioAPI) {
@@ -111,6 +122,8 @@ export class SoundComponent extends Vue {
             this.updateSound();
         }, 300));
 
+        this.$bus.$off('updatePlayDown');
+        this.$bus.$off('stopPlayDown');
 
         this.$bus.$on('updatePlayDown', (value: boolean) => {
             this.toggleSound(true);
@@ -141,7 +154,7 @@ export class SoundComponent extends Vue {
     }
 
     loadSound(fileName, bufferSourceSetter) {
-        let audioLoader: any = new AudioSampleLoader();
+        const audioLoader: any = new AudioSampleLoader();
 
         let songExt = 'mp3';
         if (this.codecs.mp3)
@@ -150,13 +163,13 @@ export class SoundComponent extends Vue {
             songExt = 'ogg';
         else if (this.codecs.wav)
             songExt = 'wav';
-        audioLoader.src = `assets/sounds/${fileName}.${songExt}`;
+        audioLoader.src = `../assets/sounds/${fileName}.${songExt}`;
         audioLoader.ctx = this.audioContext;
         audioLoader.onload = () => {
             bufferSourceSetter(audioLoader.response);
         };
         audioLoader.onerror = function () {
-            console.log(`Error loading ${fileName}.${songExt} Audio`);
+            console.error(`Error loading ${fileName}.${songExt} Audio`);
         };
         audioLoader.send();
     }
@@ -179,8 +192,7 @@ export class SoundComponent extends Vue {
     toggleSound(fromTop = false) {
         if (!this.beats_on) {
             this.play();
-        }
-        else {
+        } else {
             this.stop();
         }
 
@@ -218,7 +230,7 @@ export class SoundComponent extends Vue {
         if (this.beats_on && this.isWebAudioAPI) {
             this.rhythmSource = this.startSource(this.audioContext, this.setRhythmSource(this.beats, this.bpm));
         }
-    };
+    }
 
     playMetronome() {
         if (this.isWebAudioAPI) {
@@ -241,7 +253,6 @@ export class SoundComponent extends Vue {
         if (this.rhythmSource) {
             this.stopSource(this.rhythmSource);
         }
-
     }
 
     stopSource(source) {
@@ -252,7 +263,7 @@ export class SoundComponent extends Vue {
     }
 
     startSource(audioContext, soundBuffer) {
-        let source = audioContext.createBufferSource();
+        const source = audioContext.createBufferSource();
         source.connect(audioContext.destination);
 
         source.buffer = soundBuffer;
@@ -265,32 +276,30 @@ export class SoundComponent extends Vue {
     }
 
     setRhythmSource(beats: number[], bpm: number) {
-        let rate = 60 / bpm;
-        let noteRate = rate / 3;
+        const rate = 60 / bpm;
+        const noteRate = rate / 3;
 
         // Create empty buffer
         let soundBuffer = this.createEmptyBuffer(0.0001);
         // Create buffer one note size with silence
-        let emptyBuffer = this.createEmptyBuffer(noteRate);
+        const emptyBuffer = this.createEmptyBuffer(noteRate);
         // Create buffer double note size with silence
-        let emptyDoubleBuffer = this.createEmptyBuffer(2 * noteRate);
+        const emptyDoubleBuffer = this.createEmptyBuffer(2 * noteRate);
         // Create buffers with sound
-        let rhythmBuffer = this.mergeWithSilenceBuffer(this.rhythmBufferSource, noteRate);
-        let rhythmDoubleBuffer = this.mergeWithSilenceBuffer(this.rhythmBufferSource, 2 * noteRate);
+        const rhythmBuffer = this.mergeWithSilenceBuffer(this.rhythmBufferSource, noteRate);
+        const rhythmDoubleBuffer = this.mergeWithSilenceBuffer(this.rhythmBufferSource, 2 * noteRate);
 
         for (let i = 0; i < beats.length; i++) {
             if (beats[i] == 1) {
                 if (i % 2 == 0) {
                     soundBuffer = this.appendBuffer(soundBuffer, rhythmBuffer);
-                }
-                else {
+                } else {
                     soundBuffer = this.appendBuffer(soundBuffer, rhythmDoubleBuffer);
                 }
             } else {
                 if (i % 2 == 0) {
                     soundBuffer = this.appendBuffer(soundBuffer, emptyBuffer);
-                }
-                else {
+                } else {
                     soundBuffer = this.appendBuffer(soundBuffer, emptyDoubleBuffer);
                 }
             }
@@ -300,10 +309,10 @@ export class SoundComponent extends Vue {
     }
 
     setMetronomeSource(bpm: number) {
-        let rate = 60 / bpm;
-        let noteRate = rate / 3;
+        const rate = 60 / bpm;
+        const noteRate = rate / 3;
         // Create buffer one note size with silence
-        let emptyBuffer = this.createEmptyBuffer(noteRate);
+        const emptyBuffer = this.createEmptyBuffer(noteRate);
 
         // Create buffer double note size with sound
         let metronomeBuffer = this.mergeWithSilenceBuffer(this.metronomeBufferSource, 2 * noteRate);
@@ -313,26 +322,26 @@ export class SoundComponent extends Vue {
     }
 
     setAccentSource(soundBufferSource, bit: number, bpm: number) {
-        let rate = 60 / bpm;
-        let noteRate = rate / 3;
+        const rate = 60 / bpm;
+        const noteRate = rate / 3;
         // Create buffer one note size with silence
-        let emptyBuffer = this.createEmptyBuffer(noteRate);
+        const emptyBuffer = this.createEmptyBuffer(noteRate);
 
         // Create buffer double note size with sound
         let soundBuffer = this.mergeWithSilenceBuffer(soundBufferSource, 2 * noteRate);
         soundBuffer = this.appendBuffer(emptyBuffer, soundBuffer); // 1 + 2 = 3 note size
 
-        let emptyBitBuffer = this.createEmptyBuffer(rate * (bit - 1));
+        const emptyBitBuffer = this.createEmptyBuffer(rate * (bit - 1));
         soundBuffer = this.appendBuffer(soundBuffer, emptyBitBuffer);
 
         return soundBuffer;
     }
 
     appendBuffer(buffer1: any, buffer2: any) {
-        let numberOfChannels = Math.min(buffer1.numberOfChannels, buffer2.numberOfChannels);
-        let tmp = this.audioContext.createBuffer(numberOfChannels, (buffer1.length + buffer2.length), buffer1.sampleRate);
+        const numberOfChannels = Math.min(buffer1.numberOfChannels, buffer2.numberOfChannels);
+        const tmp = this.audioContext.createBuffer(numberOfChannels, (buffer1.length + buffer2.length), buffer1.sampleRate);
         for (let i = 0; i < numberOfChannels; i++) {
-            let channel = tmp.getChannelData(i);
+            const channel = tmp.getChannelData(i);
             // Fill channel
             channel.set(buffer1.getChannelData(i), 0); //offset = 0
             channel.set(buffer2.getChannelData(i), buffer1.length); // offset = buffer1.length
@@ -341,13 +350,13 @@ export class SoundComponent extends Vue {
     }
 
     mergeWithSilenceBuffer(buffer1: any, length: number) {//buffer1 - sound, length - silence
-        let frameCount = this.audioContext.sampleRate * length;
-        let tmp = this.audioContext.createBuffer(buffer1.numberOfChannels, frameCount, this.audioContext.sampleRate);
-        let numberOfChannels = buffer1.numberOfChannels;
+        const frameCount = this.audioContext.sampleRate * length;
+        const tmp = this.audioContext.createBuffer(buffer1.numberOfChannels, frameCount, this.audioContext.sampleRate);
+        const numberOfChannels = buffer1.numberOfChannels;
         for (let i = 0; i < numberOfChannels; i++) {
-            let channel1 = buffer1.getChannelData(i);
-            let channel2 = tmp.getChannelData(i);
-            let arr_length = Math.min(channel1.length, channel2.length);
+            const channel1 = buffer1.getChannelData(i);
+            const channel2 = tmp.getChannelData(i);
+            const arr_length = Math.min(channel1.length, channel2.length);
             for (let j = 0; j < arr_length; j++)
                 channel2[j] = channel1[j];
             //channel2.set(buffer1.getChannelData(i)); //Error: invalid array length
@@ -356,29 +365,29 @@ export class SoundComponent extends Vue {
     }
 
     createEmptyBuffer(rate: number) {
-        let frameCount = this.audioContext.sampleRate * rate;
-        let emptyBuffer = this.audioContext.createBuffer(1, frameCount, this.audioContext.sampleRate);
+        const frameCount = this.audioContext.sampleRate * rate;
+        const emptyBuffer = this.audioContext.createBuffer(1, frameCount, this.audioContext.sampleRate);
         return emptyBuffer;
     }
 
-    updateSliderMessage(bpm){
-        if(bpm<=40){
+    updateSliderMessage(bpm) {
+        if (bpm <= 40) {
             this.sliderMessage = 'Slider_message_40';
-        }else if(bpm<=60){
+        } else if (bpm <= 60) {
             this.sliderMessage = 'Slider_message_60';
-        }else if(bpm<=100){
+        } else if (bpm <= 100) {
             this.sliderMessage = 'Slider_message_100';
-        }else if(bpm<=130){
+        } else if (bpm <= 130) {
             this.sliderMessage = 'Slider_message_130';
-        }else if(bpm<=160){
+        } else if (bpm <= 160) {
             this.sliderMessage = 'Slider_message_160';
-        }else if(bpm<=190){
+        } else if (bpm <= 190) {
             this.sliderMessage = 'Slider_message_190';
-        }else if(bpm<=220){
+        } else if (bpm <= 220) {
             this.sliderMessage = 'Slider_message_220';
-        }else if(bpm<=270){
+        } else if (bpm <= 270) {
             this.sliderMessage = 'Slider_message_270';
-        }else if(bpm<=300){
+        } else if (bpm <= 300) {
             this.sliderMessage = 'Slider_message_300';
         }
     }
