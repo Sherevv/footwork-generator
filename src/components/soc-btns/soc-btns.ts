@@ -104,6 +104,8 @@ export default class SocialButtonsComponent extends Vue {
     }
 
     updateShareContent(share: any, content: any): void {
-        share.updateContent(content);
+        if(share) {
+            share.updateContent(content);
+        }
     }
 }
