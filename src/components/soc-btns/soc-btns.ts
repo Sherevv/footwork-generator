@@ -94,7 +94,7 @@ export default class SocialButtonsComponent extends Vue {
     }
 
     setContentUrl(content: any): void {
-        if ('url' in content) {
+        if (content && 'url' in content) {
             if (this.$route.name === 'Generator') {
                 content.url = this.url + this.$route.fullPath;
             } else {
