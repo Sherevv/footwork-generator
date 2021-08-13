@@ -140,7 +140,6 @@ export default class GeneratorComponent extends Vue {
 
     mounted(): void {
         this.$watch('options', (value) => {
-            console.log('options', this.options.evenness);
             this.$ls.set('options', value);
         }, {deep: true});
 
