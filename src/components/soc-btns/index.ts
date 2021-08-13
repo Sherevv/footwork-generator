@@ -1,1 +1,1 @@
-export * from './soc-btns';
+export {default} from './soc-btns.vue';

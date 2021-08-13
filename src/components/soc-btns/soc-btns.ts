@@ -1,20 +1,23 @@
-import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
+import { Vue, Options } from 'vue-class-component';
+import { useRoute } from 'vue-router';
+import { SITE_URL } from "@/config";
 
-@Component({
-    template: require('./soc-btns.vue'),
+declare const Ya; // for Yandex Share
+
+@Options({
     computed: {
         showRu: function () {
             return this.$translate.lang() === 'ru';
         }
     }
 })
-export class SocBtnsComponent extends Vue {
+export default class SocialButtonsComponent extends Vue {
 
-    url: string = 'https://fwg.it4t.ru';
+    url = SITE_URL;
+    route = useRoute();
 
-    mounted() {
-        let script = document.createElement('script');
+    mounted(): void {
+        const script = document.createElement('script');
         script.onload = () => {
             this.showBtns();
         };
@@ -23,9 +26,8 @@ export class SocBtnsComponent extends Vue {
         document.head.appendChild(script);
     }
 
-    showBtns() {
-
-        let content = {
+    showBtns(): void {
+        const content = {
             ru: {
                 url: this.url,
                 title: 'Генератор Футворка - внеси разнообразие в свой линди хоп бейсик!',
@@ -34,7 +36,7 @@ export class SocBtnsComponent extends Vue {
             },
             en: {}
         };
-        let theme = {
+        const theme = {
             ru: {
                 services: 'facebook,vkontakte,telegram,twitter,lj,odnoklassniki,moimir,gplus,viber,whatsapp,pinterest,reddit,digg,linkedin,evernote',
                 limit: 4,
@@ -53,34 +55,49 @@ export class SocBtnsComponent extends Vue {
         theme.en = Object.assign({}, theme.ru);
         theme.en['lang'] = 'en';
 
-        let share = {
+        const share = {
             ru: {},
             en: {}
         };
 
         try {
-            this.setContentUrl(content[this.$route.params.lang]);
 
-            share.ru = Ya.share2('ya-share-ru', {
-                content: content.ru,
-                theme: theme.ru
-            });
+            if(this.route.params.lang)
+            {
+                let lang;
+                if (typeof this.route.params.lang  === "string"){
+                    lang = this.route.params.lang
+                }else{
+                    lang = this.route.params.lang[0];
+                }
 
-            share.en = Ya.share2('ya-share-en', {
-                content: content.en,
-                theme: theme.en
-            });
+                this.setContentUrl(content[lang]);
 
-            this.$watch('$route', (to, from) => {
+                share.ru = Ya.share2('ya-share-ru', {
+                    content: content.ru,
+                    theme: theme.ru
+                });
+
+                share.en = Ya.share2('ya-share-en', {
+                    content: content.en,
+                    theme: theme.en
+                });
+            }
+
+
+            this.$watch('$route', (to) => {
                 this.setContentUrl(content[to.params.lang]);
-                this.updateContent(share[to.params.lang], content[to.params.lang]);
+                this.updateShareContent(share[to.params.lang], content[to.params.lang]);
             });
         } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                console.log(e);
+            }
         }
 
     }
 
-    setContentUrl(content) {
+    setContentUrl(content: any): void {
         if ('url' in content) {
             if (this.$route.name === 'Generator') {
                 content.url = this.url + this.$route.fullPath;
@@ -90,7 +107,7 @@ export class SocBtnsComponent extends Vue {
         }
     }
 
-    updateContent(share, content) {
+    updateShareContent(share: any, content: any): void {
         share.updateContent(content);
     }
 }
