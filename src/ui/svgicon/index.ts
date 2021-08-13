@@ -1,1 +1,1 @@
-export * from './svgicon';
+export { default } from './svgicon.vue';

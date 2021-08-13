@@ -1,18 +1,15 @@
-import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
-import '../../ui/svgicon';
+import { Vue, Options } from 'vue-class-component';
 
-@Component({
-    template: require('./svgicon.vue'),
+@Options({
     props: {
         icon: {
             type: String,
         },
         iconClass: {
             type: String,
-            default:''
+            default: ''
         },
     }
 })
-export class SvgIconComponent extends Vue {
+export default class SvgIconComponent extends Vue {
 }
