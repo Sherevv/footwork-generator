@@ -1,6 +1,13 @@
 import { WebStorage } from './storage';
 // eslint-disable-next-line
-const _global = (typeof window !== 'undefined' ? window : global || {});
+const _global = window;
+declare global {  interface Window {    VueStorage?: any;  }}
+
+declare module '@vue/runtime-core' {
+    export interface ComponentCustomProperties {
+        $ls: any
+    }
+}
 
 /**
  * @type {{install: (function(Object, Object): WebStorage)}}
@@ -21,7 +28,7 @@ const VueStorage = {
         };
 
 
-        let store = 'localStorage' in _global
+        const store = 'localStorage' in _global
             ? _global.localStorage
             : null;
 
@@ -36,7 +43,6 @@ const VueStorage = {
     },
 };
 
-// eslint-disable-next-line
 _global.VueStorage = VueStorage;
 
 export default VueStorage;
