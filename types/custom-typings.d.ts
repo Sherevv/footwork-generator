@@ -5,14 +5,9 @@ declare module "*.json" {
 
 declare module 'debounce';
 
-import Vue from 'vue'
 
-// extends vue/types/vue.d.ts
-declare module "vue/types/vue" {
-    // Extension for Vue
-    interface Vue {
+declare module '@vue/runtime-core' {
+    export interface ComponentCustomProperties {
         $ls: any;
-        $ver: string;
-        $copyText: any;
     }
 }
