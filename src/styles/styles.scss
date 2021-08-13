@@ -123,6 +123,7 @@ h2 {
     background-color: #fcfcfc;
     font-size: 16px;
   }
+
   .el-collapse-item__header,
   .el-collapse-item__content {
     padding-left: 20px;
@@ -258,12 +259,6 @@ h2 {
   font-size: 12px !important;
 }
 
-.sound-btns-generator {
-  float: left;
-  margin-top: 25px;
-  margin-left: 20px;
-  position: absolute;
-}
 
 .flag-ru {
   background: url("../assets/img/ru.png") no-repeat;
@@ -296,12 +291,17 @@ h2 {
   display: none;
 }
 
+.col1 {
+  margin-bottom: 15px;
+}
+
 .col2 {
   width: 50%;
   float: left;
   @media (max-width: 600px) {
     width: 100%;
   }
+  margin-bottom: 15px;
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -330,4 +330,9 @@ a:visited {
   width: 149px;
   height: 149px;
   background-image: url("../assets/img/forkme.png");
+}
+
+p {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
