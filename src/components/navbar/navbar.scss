@@ -24,7 +24,7 @@
 
     display: inline-block;
 
-    &.nav-right{
+    &.nav-right {
       flex-grow: 0;
       align-self: center;
       padding: 0;
@@ -38,43 +38,42 @@
     }
 
     a {
-       padding: 15px 20px;
-       display: block;
-       text-decoration: none;
-       color: $text-color;
-       font-weight: 400;
+      padding: 15px 20px;
+      display: block;
+      text-decoration: none;
+      color: $text-color;
+      font-weight: 400;
 
-       &:visited {
-         color: #555;
-       }
+      &:visited {
+        color: #555;
+      }
 
-       @include hover-focus-active {
-         background-color: #f9f9f9;
-         color: #000;
-         text-shadow: 1px 1px 10px rgb(199, 199, 199);
-       }
+      @include hover-focus-active {
+        background-color: #f9f9f9;
+        color: #000;
+        text-shadow: 1px 1px 10px rgb(199, 199, 199);
+      }
 
-       @media (max-width: $breakpoint-md) {
-         font-size: 14px;
-         padding-left: 10px;
-         padding-right: 10px;
-       }
+      @media (max-width: $breakpoint-md) {
+        font-size: 14px;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
 
-       @media (max-width: $menu-breakpoint) {
-         padding: 10px 15px;
-         @include hover-focus-active {
-           padding-bottom: 10px;
-           border-left: 6px solid #000;
-           border-bottom: 1px;
-         }
-       }
+      @media (max-width: $menu-breakpoint) {
+        padding: 10px 15px;
+        @include hover-focus-active {
+          padding-bottom: 10px;
+          border-left: 6px solid #000;
+          border-bottom: 1px;
+        }
+      }
 
-     }
+    }
   }
 
 
-
-  .navbar-brand{
+  .navbar-brand {
     padding-top: 15px;
     display: block;
     text-decoration: none;
@@ -112,14 +111,14 @@
       display: flex;
       position: absolute;
       width: 100%;
-      background-color: rgba(248,248,248,0.9);
+      background-color: rgba(248, 248, 248, 0.9);
       margin-left: -15px;
       padding-left: 20px;
       padding-right: 20px;
       border-bottom: 1px solid #e7e7e7;
 
 
-      .nav-right{
+      .nav-right {
         flex-grow: 0;
         align-self: auto;
         padding: 0;
@@ -211,7 +210,7 @@
     color: #000;
   }
 
-  .icon-nav{
+  .icon-nav {
     height: 34px;
     width: 44px;
     vertical-align: bottom;
@@ -229,6 +228,7 @@
   .icon-bars {
     display: inline-block;
   }
+
   .icon-close {
     display: none;
   }
@@ -240,6 +240,7 @@
     .icon-bars {
       display: none;
     }
+
     .icon-close {
       display: inline-block;
     }
@@ -254,7 +255,7 @@
   opacity: 0.98;
 }
 
-.lang-btn{
+.lang-btn {
   background-color: #eaeaea;
   border: 0;
   cursor: pointer;
@@ -262,7 +263,7 @@
   padding: 10px;
 }
 
-#logo{
+#logo {
   background-image: url("img/logo.png");
   width: 29px;
   height: 40px;

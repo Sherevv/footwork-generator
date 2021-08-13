@@ -1,13 +1,10 @@
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import {Watch} from 'vue-property-decorator';
-import routes from '../../routes';
-import './nav.scss';
+import { Vue, Options, Watch, Prop } from 'vue-property-decorator';
+import routes from '@/router/routes';
 
-@Component({
-    template: require('./navbar.vue')
-})
-export class NavbarComponent extends Vue {
+
+@Options({})
+export default class NavbarComponent extends Vue {
+    @Prop()
     links = routes;
 
     lang = () => this.$translate.lang();
@@ -16,22 +13,25 @@ export class NavbarComponent extends Vue {
     pathChanged() {
         if (process.env.NODE_ENV !== 'production') {
             console.log('lang: ');
-            console.log(this.$route.params);
-            console.log(this.$route);
-            console.log(this.$translate.langs.indexOf(this.$route.params.lang));
+            console.log('route', this.$route);
+            console.log('query', this.$route.params);
+            console.log('lang index', this.$translate.langs.indexOf(this.$route.params.lang));
         }
         // If lang setup in url - use it, else use fallback
-        if (this.$route.params.lang) {
-            if (this.$route.params.lang != this.$translate.lang() && this.$translate.langs.indexOf(this.$route.params.lang) !== -1) {
-                this.$translate.setLang(this.$route.params.lang);
+        let lang = this.$route.params.lang;
+        if (lang) {
+            if (lang != this.$translate.lang() && this.$translate.langs.indexOf(lang) !== -1) {
+                this.$translate.setLang(lang.toString());
             }
         } else {
+            lang = this.$translate.lang();
             if (this.$route.name) {
-                let lang = this.$ls.get('lang');
-                if (!(lang && this.$translate.langs.indexOf(lang) !== -1)) {
-                    lang = this.$translate.fallback;
-                }
-                this.$router.push({name: this.$route.name, params: {lang: lang}});
+                this.$router.push({
+                    name: this.$route.name,
+                    params: {lang: lang},
+                    query: this.$route.query,
+                    replace: true
+                });
             } else {
                 this.$router.push({path: '/'});
             }
@@ -39,13 +39,19 @@ export class NavbarComponent extends Vue {
     }
 
     created() {
-        this.$translate.setTranslationModule('common', this, true);
+        this.$translate.setTranslationModule('common', this);
     }
 
     changeLanguage(lang: string) {
         this.$translate.setLang(lang);
         this.$ls.set('lang', lang);
-        this.$router.replace({name: this.$route.name, params: {lang: lang}}).catch(error => {
+
+        let route = this.$route.name;
+        if (route == null) {
+            route = undefined;
+        }
+
+        this.$router.replace({name: route, params: {lang: lang}, query: this.$route.query}).catch(error => {
             if (error.name != "NavigationDuplicated") {
                 throw error;
             }
