@@ -1,9 +1,7 @@
-import Vue from 'vue';
-import Component from 'vue-class-component';
 import axios from 'axios';
-import './contact-form.scss';
-import {SvgIconComponent} from "../../ui/svgicon";
-import {FORM_ACTION} from '../../config';
+import { Vue, Options } from 'vue-class-component';
+import { FORM_ACTION } from '@/config';
+import SvgIconComponent from "@/ui/svgicon";
 
 class Errors {
     errors: any;
@@ -12,55 +10,53 @@ class Errors {
         this.errors = {};
     }
 
-    get(field:string) {
+    get(field: string) {
         if (this.errors && this.errors[field]) {
             return this.errors[field][0];
         }
     }
 
-    has(field:string) {
-        return this.errors.hasOwnProperty(field);
+    has(field: string): boolean {
+        return Object.prototype.hasOwnProperty.call(this.errors, field);
     }
 
-    any() {
+    any(): boolean {
         return Object.keys(this.errors).length > 0;
     }
 
-    setup(errors:any) {
+    setup(errors: any): void {
         this.errors = errors;
     }
 
-    clear(field:string) {
+    clear(field: string): void {
         delete this.errors[field];
     }
 }
 
 
-@Component({
-    template: require('./contact-form.vue'),
+@Options({
     components: {
         'it-svgicon': SvgIconComponent
     },
 })
-export class ContactFormComponent extends Vue {
+export default class ContactFormComponent extends Vue {
     contact = {};
-    formErrors:any = new Errors();
-    errorFrom:boolean = false;
-    successFrom:boolean = false;
-    is_bisy:boolean = false;
-    is_fail:boolean = false;
-    is_success:boolean = false;
-    is_form_errors:boolean = false;
+    formErrors = new Errors();
+    errorFrom = false;
+    successFrom = false;
+    is_busy = false;
+    is_fail = false;
+    is_success = false;
+    is_form_errors = false;
 
-    onSubmit() {
+    onSubmit(): void {
         axios.post(FORM_ACTION, this.contact)
             .then(response => {
                 if (process.env.NODE_ENV === 'development') {
                     console.log("from submit success");
                 }
-                this.is_bisy = false;
+                this.is_busy = false;
                 this.is_success = true;
-                //this.resetForm();
             })
             .catch(error => {
                 if (process.env.NODE_ENV === 'development') {
@@ -73,16 +69,15 @@ export class ContactFormComponent extends Vue {
                 } else {
                     this.is_fail = true;
                 }
-                this.is_bisy = false;
+                this.is_busy = false;
             });
 
         if (process.env.NODE_ENV === 'development') {
             console.log("form submit");
         }
-
     }
 
-    onFormChange() {
+    onFormChange(): void {
         if (process.env.NODE_ENV === 'development') {
             console.log("form change");
         }
@@ -91,6 +86,4 @@ export class ContactFormComponent extends Vue {
         this.is_success = false;
         this.is_form_errors = false;
     }
-
-
 }
