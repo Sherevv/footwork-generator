@@ -1,35 +1,35 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
 import EventBus from './plugins/event-bus';
 import VueTranslate from './plugins/vue-translate';
-import VueLocalStorage from 'vue-ls';
-import VueClipboard from 'vue-clipboard2';
-import vueHeadful from 'vue-headful';
-import routes from './routes';
+import VueLocalStorage from './plugins/localstorage'
+import { VueClipboard } from '@soerenmartius/vue3-clipboard'
+import vueHeadful from './plugins/vue-headful/vue-headful';
 import './styles/styles.scss';
-import './element-ui.js';
 import {App} from './components/app';
+import './registerServiceWorker';
 
+import { createApp } from 'vue/dist/vue.runtime.esm-bundler';
+import router from "./router";
+import ElementPlus from 'element-plus';
+import 'element-plus/lib/theme-chalk/index.css';
 
-// register plugins
-Vue.use(VueClipboard);
-Vue.use(VueRouter);
-Vue.use(VueTranslate, {
+const app = createApp(App);
+
+declare module '@vue/runtime-core' {
+    export interface ComponentCustomProperties {
+        $ls: any,
+        $ver: any,
+        $copyText: any
+    }
+}
+
+app.use(EventBus);
+app.use(VueLocalStorage);
+app.use(VueTranslate, {
     langs: ['en', 'ru']
 });
-Vue.use(EventBus);
-Vue.use(VueLocalStorage);
-Vue.prototype.$ver = '2018.7.6';
-Vue.component('vue-headful', vueHeadful);
+app.use(VueClipboard);
+app.use(ElementPlus);
 
-let router = new VueRouter({mode: 'history', routes:routes});
+app.component('vue-headful', vueHeadful);
 
-let vue = new Vue({
-    el: '#app-main',
-    router: router,
-    render: h => h(App),
-    mounted(){
-        // For prerender plugin
-        document.dispatchEvent(new Event('vue-post-render'));
-    }
-});
+app.use(router).mount("#app");
