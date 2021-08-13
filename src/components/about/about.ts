@@ -12,13 +12,9 @@ import SvgIconComponent from "@/ui/svgicon/svgicon.vue";
 })
 export default class AboutComponent extends Vue {
     @Prop()
-    ml = '';
+    email = EMAIL;
 
     created() {
         this.$translate.setTranslationModule('about', this);
-    }
-
-    mounted() {
-        this.ml = EMAIL;
     }
 }

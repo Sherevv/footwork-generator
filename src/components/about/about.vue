@@ -3,7 +3,7 @@
     <h1 class="page-heading" v-translate>About</h1>
     <p v-html="t('About_1')"></p>
     <p v-html="t('About_2')"></p>
-    <p><span v-translate>About_3</span><a :href="'mailto:'+ml">{{ ml }}</a><span v-translate>About_3_1</span><span
+    <p><span v-translate>About_3</span><a :href="'mailto:'+email">{{ email }}</a><span v-translate>About_3_1</span><span
         v-translate>About_4</span>:</p>
 
     <it-contact-form :key="$translate.current"></it-contact-form>
