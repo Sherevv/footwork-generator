@@ -16,7 +16,7 @@
 
       <div class="nav">
         <ul>
-          <template v-for="link in links">
+          <template v-for="link in links" v-bind:key="link">
             <li v-if="link.name" v-bind:class="{'active': $route.name === link.name}">
               <router-link v-bind:to="localizePath(link.name)">{{ t(link.name) }}</router-link>
             </li>
