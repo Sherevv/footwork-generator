@@ -8,7 +8,7 @@
 </template>
 <script>
 import { Options, Vue } from "vue-class-component";
-import SocialButtonsComponent from "@/components/soc-btns/soc-btns";
+import SocialButtonsComponent from "@/components/soc-btns/";
 
 @Options({
   components: {
