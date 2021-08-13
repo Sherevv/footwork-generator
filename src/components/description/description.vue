@@ -1,4 +1,5 @@
-<div class="content-div">
+<template>
+  <div class="content-div" v-cloak>
     <h1 class="page-heading" v-translate>Description</h1>
 
     <p v-translate>Description_1</p>
@@ -16,124 +17,125 @@
     <p v-html="t('Description_9')"></p>
 
     <div class="cards-block-sm">
-        <div class="card-block">
-            <span class="card blue">1</span>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-            <div class="card-lbl left-lbl">rock</div>
-        </div>
-        <div class="card-block">
-            <span class="card blue">1</span>
+        <div class="card-lbl">step</div>
+        <div class="card-lbl left-lbl">rock</div>
+      </div>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-            <div class="card-lbl right-lbl">step</div>
-        </div>
-        <div class="card-block">
-            <span class="card blue">1</span>
+        <div class="card-lbl">step</div>
+        <div class="card-lbl right-lbl">step</div>
+      </div>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-            <div class="card-lbl left-lbl">triple</div>
-        </div>
-        <div class="card-block">
-            <span class="card red">2</span>
+        <div class="card-lbl">step</div>
+        <div class="card-lbl left-lbl">triple</div>
+      </div>
+      <div class="card-block">
+        <span class="card red">2</span>
 
-            <div class="card-lbl">bllch</div>
-            <div class="card-lbl right-lbl">step</div>
-        </div>
-        <div class="card-block">
-            <span class="card blue">1</span>
+        <div class="card-lbl">bllch</div>
+        <div class="card-lbl right-lbl">step</div>
+      </div>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-            <div class="card-lbl left-lbl">triple</div>
-        </div>
-        <div class="card-block">
-            <span class="card red">2</span>
+        <div class="card-lbl">step</div>
+        <div class="card-lbl left-lbl">triple</div>
+      </div>
+      <div class="card-block">
+        <span class="card red">2</span>
 
-            <div class="card-lbl">bllch</div>
-            <div class="card-lbl right-lbl">step</div>
-        </div>
+        <div class="card-lbl">bllch</div>
+        <div class="card-lbl right-lbl">step</div>
+      </div>
     </div>
     <br/>
 
     <p v-html="t('Description_10')"></p>
 
     <div class="cards-block-sm">
-        <div class="card-block">
-            <span class="card blue">1</span>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-            <div class="card-lbl left-lbl">rock</div>
-        </div>
-        <div class="card-block">
-            <span class="card blue">1</span>
+        <div class="card-lbl">step</div>
+        <div class="card-lbl left-lbl">rock</div>
+      </div>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-            <div class="card-lbl right-lbl">step</div>
-        </div>
-        <div class="card-block">
-            <span class="card blue">1</span>
+        <div class="card-lbl">step</div>
+        <div class="card-lbl right-lbl">step</div>
+      </div>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-            <div class="card-lbl left-lbl">triple</div>
-        </div>
-        <div class="card-block">
-            <span class="card red">2</span>
+        <div class="card-lbl">step</div>
+        <div class="card-lbl left-lbl">triple</div>
+      </div>
+      <div class="card-block">
+        <span class="card red">2</span>
 
-            <div class="card-lbl">bllch</div>
-            <div class="card-lbl right-lbl">step</div>
-        </div>
-        <div class="card-block">
-            <span class="card blue">1</span>
+        <div class="card-lbl">bllch</div>
+        <div class="card-lbl right-lbl">step</div>
+      </div>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-        </div>
-        <div class="card-block">
-            <span class="card blue">1</span>
+        <div class="card-lbl">step</div>
+      </div>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-        </div>
-        <div class="card-block">
-            <span class="card blue">1</span>
+        <div class="card-lbl">step</div>
+      </div>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-            <div class="card-lbl left-lbl">triple</div>
-        </div>
-        <div class="card-block">
-            <span class="card red">2</span>
+        <div class="card-lbl">step</div>
+        <div class="card-lbl left-lbl">triple</div>
+      </div>
+      <div class="card-block">
+        <span class="card red">2</span>
 
-            <div class="card-lbl">bllch</div>
-            <div class="card-lbl right-lbl">step</div>
-        </div>
+        <div class="card-lbl">bllch</div>
+        <div class="card-lbl right-lbl">step</div>
+      </div>
     </div>
 
     <h3 v-translate>Description_syncopation</h3>
     <div v-html="t('Description_sync_1')"></div>
-    <p><span class="card green card-sm">S</span> - <span v-translate>Description_sync_2</span> <span class="card red card-sm">2</span></p>
+    <p><span class="card green card-sm">S</span> - <span v-translate>Description_sync_2</span> <span
+        class="card red card-sm">2</span></p>
     <div class="cards-block-sm">
-        <div class="card-block">
-            <span class="card blue">1</span>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-            <div class="card-lbl left-lbl">rock</div>
-        </div>
-        <div class="card-block">
-            <span class="card blue">1</span>
+        <div class="card-lbl">step</div>
+        <div class="card-lbl left-lbl">rock</div>
+      </div>
+      <div class="card-block">
+        <span class="card blue">1</span>
 
-            <div class="card-lbl">step</div>
-            <div class="card-lbl right-lbl">step</div>
-        </div>
-        <div class="card-block">
-            <span class="card green">S</span>
+        <div class="card-lbl">step</div>
+        <div class="card-lbl right-lbl">step</div>
+      </div>
+      <div class="card-block">
+        <span class="card green">S</span>
 
-            <div class="card-lbl">STep</div>
-            <div class="card-lbl left-lbl">TRIple</div>
-        </div>
-        <div class="card-block">
-            <span class="card red">2</span>
+        <div class="card-lbl">STep</div>
+        <div class="card-lbl left-lbl">TRIple</div>
+      </div>
+      <div class="card-block">
+        <span class="card red">2</span>
 
-            <div class="card-lbl">bllch</div>
-            <div class="card-lbl right-lbl">step</div>
-        </div>
+        <div class="card-lbl">bllch</div>
+        <div class="card-lbl right-lbl">step</div>
+      </div>
     </div>
     <p v-html="t('Description_sync_3')"></p>
 
@@ -142,5 +144,9 @@
 
     <h3 v-translate>Description_settings</h3>
     <div v-html="t('Description_settings_1')"></div>
-    <vue-headful :title="t('Description') + ' | ' + t('TITLE')" :lang="$route.params.lang" :description="t('Description_meta_description')"/>
-</div>
+    <vue-headful :title="t('Description') + ' | ' + t('TITLE')"
+                 :lang="$route.params.lang"
+                 :description="t('Description_meta_description')"/>
+  </div>
+</template>
+<script src="./description.ts" lang="ts"></script>
