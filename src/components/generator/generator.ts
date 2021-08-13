@@ -1,8 +1,10 @@
-import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
-import {SoundComponent} from '../sound';
-import {SvgIconComponent} from "../../ui/svgicon";
-import './generator.scss';
+import { Vue, Options, Prop } from 'vue-property-decorator';
+import { toClipboard } from '@soerenmartius/vue3-clipboard';
+import { APP_VERSION } from "@/config";
+import SoundComponent from '../sound';
+import SvgIconComponent from "@/ui/svgicon";
+import { GeneratorOption, SoundOption } from "@/components/generator/options";
+
 
 class Card {
     num: number;
@@ -21,8 +23,7 @@ class Card {
 }
 
 
-@Component({
-    template: require('./generator.vue'),
+@Options({
     components: {
         'it-sound': SoundComponent,
         'it-svgicon': SvgIconComponent
@@ -33,22 +34,30 @@ class Card {
         next();
     },
 })
-export class GeneratorComponent extends Vue {
+export default class GeneratorComponent extends Vue {
+
+    declare $refs: Vue["$refs"] & {
+        sharedLink: HTMLFormElement
+    }
+    //sharedLink:HTMLFormElement = ref(null);
 
     @Prop(String) b: string;
     @Prop(String) n: string;
 
-    copySucceeded = null;
-    shareLink: string = '';
-    version: string = this.$ver;
-    opt_ver: string = '1';
+
+    copySucceeded = 0;
+    shareLink = '';
+    version: string = APP_VERSION;
+    opt_ver = '1';
     beats: number[] = [];
-    beats_on: any = false;
-    isAudio: boolean = true;
-    swOffClr: string = '#ff999c';
+    beats_on = false;
+    isAudio = true;
+    swOffClr = '#ff999c';
     nums: number[] = [];
 
-    options: any = {};
+    evenness = 'even'
+
+    options = <GeneratorOption>{};
     options_def = {
         bit_count: 8,
         rows: 1,
@@ -60,12 +69,7 @@ export class GeneratorComponent extends Vue {
         show_row_index: true,
         show_triple: true,
         couple: true,
-        sound: {
-            soundType: 1,
-            bpm: 130,
-            isPlayAccent: false,
-            accentBit: 8
-        },
+        sound: new SoundOption(),
         kick_instead_hold: false,
         manual_mode: false
     };
@@ -77,15 +81,14 @@ export class GeneratorComponent extends Vue {
         new Card(-1, 'green', 'STep', '', 'S'),
     ];
     cards = [];
-    isShowShareLink: boolean = false;
+    isShowShareLink = false;
 
 
-    created() {
-
+    created(): void {
         this.$translate.setTranslationModule('generator', this);
 
 
-        let options_query = this.checkQueryParams(this.b, this.n);
+        const options_query = <GeneratorOption>this.checkQueryParams(this.b, this.n);
 
         // Load saved options from LocalStorage
         this.restoreOptions(options_query);
@@ -93,15 +96,14 @@ export class GeneratorComponent extends Vue {
         this.setSharedLink(this.$route.fullPath);
     }
 
-    restoreOptions(options_query) {
-        let opt = this.$ls.get('options');
+    restoreOptions(options_query: GeneratorOption): void {
+        const opt = this.$ls.get('options');
 
         // Check version of options
         if (this.$ls.get('ver') === this.opt_ver) {
             if (opt) {
                 this.options = opt;
-            }
-            else {
+            } else {
                 this.options = this.options_def;
             }
             // Merge options with options from query params
@@ -118,8 +120,7 @@ export class GeneratorComponent extends Vue {
             // If versions does not equal, try to merge with defaults
             if (opt) {
                 this.options = this.merge(this.options_def, opt);
-            }
-            else {
+            } else {
                 this.options = this.options_def;
             }
 
@@ -137,9 +138,9 @@ export class GeneratorComponent extends Vue {
         this.$ls.set('options', this.options);
     }
 
-    mounted() {
-
+    mounted(): void {
         this.$watch('options', (value) => {
+            console.log('options', this.options.evenness);
             this.$ls.set('options', value);
         }, {deep: true});
 
@@ -164,14 +165,7 @@ export class GeneratorComponent extends Vue {
         });
 
         this.$watch('$route', (to, from) => {
-
-            let options_query = this.checkQueryParams(to.query.b, to.query.n);
-            if (options_query["nums"]) {
-                this.nums = options_query["nums"];
-            }
-            this.options = this.merge(this.options, options_query);
-            this.rerender();
-
+            if (to.name != from.name) return;
             this.setSharedLink(to.fullPath);
         });
 
@@ -195,7 +189,6 @@ export class GeneratorComponent extends Vue {
             }
         });
 
-
         this.$watch(() => {
             return `${this.options.couple}${this.options.kick_instead_hold}${this.options.show_triple}`
         }, () => {
@@ -206,7 +199,7 @@ export class GeneratorComponent extends Vue {
         this.$bus.$on('updatePlayUp', (value: boolean) => {
             this.beats_on = value;
         });
-        this.$bus.$on('updateSoundProps', (value: any) => {
+        this.$bus.$on('updateSoundProps', (value: SoundOption) => {
             this.options.sound = value;
         });
 
@@ -217,8 +210,8 @@ export class GeneratorComponent extends Vue {
         this.generate(this.nums);
     }
 
-    checkQueryParams(qb, qn): object {
-        let options = {
+    checkQueryParams(qb: string, qn: string): Partial<GeneratorOption> {
+        const options: Partial<GeneratorOption> = {
             bit_count: 8,
             rows: 1,
             evenness: 'no',
@@ -227,7 +220,8 @@ export class GeneratorComponent extends Vue {
             nums: []
         };
 
-        let b, n;
+        let b = 8,
+            n: number[];
 
         if (qb) {
             b = Number(qb);
@@ -235,12 +229,12 @@ export class GeneratorComponent extends Vue {
                 b = 8;
             }
         } else {
-            return {};
+            return <GeneratorOption>{};
         }
         if (qn) {
             n = qn.split(',').map(Number);
         } else {
-            return {};
+            return <GeneratorOption>{};
         }
 
         // Check if query params is correct
@@ -257,9 +251,8 @@ export class GeneratorComponent extends Vue {
             }
             return options;
         } else {
-            return {};
+            return <GeneratorOption>{};
         }
-
     }
 
 
@@ -268,13 +261,13 @@ export class GeneratorComponent extends Vue {
         this.$bus.$emit("updatePlayDown", this.beats_on);
     }
 
-    addBeats() {
+    addBeats(): void {
         this.nums = this.nums.concat(this.nums.slice(-this.options.bit_count));
         this.options.rows++;
         this.rerender();
     }
 
-    removeBeats() {
+    removeBeats(): void {
         if (this.options.rows > 1) {
             this.nums.splice(-this.options.bit_count, this.options.bit_count);
             this.options.rows--;
@@ -294,14 +287,14 @@ export class GeneratorComponent extends Vue {
             use_old_nums = true;
         }
 
-        let cards: Card[] = this.cards = [];
-        let beats: number[] = this.beats = [];
-        let options = this.options;
+        const cards: Card[] = this.cards = [];
+        const beats: number[] = this.beats = [];
+        const options = this.options;
         let sum = 0;
         let num = 0;
         let sync_cnt = 0;
-        let num_arr: number[] = [];
-        let len = options.bit_count * options.rows;
+        const num_arr: number[] = [];
+        const len = options.bit_count * options.rows;
         for (let i = 0; i < len; i++) {
 
             if (!use_old_nums) {
@@ -311,16 +304,14 @@ export class GeneratorComponent extends Vue {
                     if (options.evenness === 'even') {
                         if (sum % 2 == 0) {
                             num = this.getRandomFromArray([0, 2]);
-                        }
-                        else {
+                        } else {
                             if (sync_cnt >= options.syncopation) {
                                 num = 1
                             } else {
                                 num = this.getRandomFromArray([1, -1]);
                             }
                         }
-                    }
-                    else {
+                    } else {
 
                         if (sum % 2 == 0) {
                             if (sync_cnt >= options.syncopation) {
@@ -328,13 +319,11 @@ export class GeneratorComponent extends Vue {
                             } else {
                                 num = this.getRandomFromArray([1, -1]);
                             }
-                        }
-                        else {
+                        } else {
                             num = this.getRandomFromArray([0, 2]);
                         }
                     }
-                }
-                else {
+                } else {
                     if (sync_cnt >= options.syncopation) {
                         num = this.getRandomNumber(3) - 1;  // [0,1,2]
                         if (num < 0)
@@ -345,30 +334,26 @@ export class GeneratorComponent extends Vue {
                             num = -1;
                     }
                 }
-            }
-            else {
+            } else {
                 num = nums[i];
             }
 
             if (num === 1) {
                 beats[2 * i] = 0;
                 beats[2 * i + 1] = 1;
-            }
-            else if (num === 2) {
+            } else if (num === 2) {
                 beats[2 * i] = 1;
                 beats[2 * i + 1] = 1;
-            }
-            else if (num === -1) {
+            } else if (num === -1) {
                 beats[2 * i] = 1;
                 beats[2 * i + 1] = 0;
-            }
-            else {
+            } else {
                 beats[2 * i] = 0;
                 beats[2 * i + 1] = 0;
             }
 
-            let k = (num > -1) ? num : 3;
-            let card = {...this.classes[k]};
+            const k = (num > -1) ? num : 3;
+            const card = {...this.classes[k]};
             if (num === 0 && options.kick_instead_hold)
                 card.step = 'kick';
             cards[i] = card;
@@ -376,8 +361,7 @@ export class GeneratorComponent extends Vue {
             if (options.couple) {
                 if (i % 2 === 0) {
                     cards[i].label_class = 'left-lbl';
-                }
-                else {
+                } else {
                     cards[i].label_class = 'right-lbl';
                 }
             }
@@ -417,24 +401,28 @@ export class GeneratorComponent extends Vue {
 
         this.$ls.set('nums', num_arr);
 
-        this.$router.push({path: 'generator', query: {b: options.bit_count.toString(), n: this.nums.toString()}}).catch(error => {
+        this.$router.push({
+            name: 'Generator',
+            params: {lang: this.$translate.lang()},
+            query: {b: options.bit_count.toString(), n: this.nums.toString()}
+        }).catch(error => {
             if (error.name != "NavigationDuplicated") {
                 throw error;
             }
         });
-    };
+    }
 
-    toggleShareRhythm() {
+    toggleShareRhythm(): void {
         this.isShowShareLink = !this.isShowShareLink;
         if (this.isShowShareLink) {
             setTimeout(() => {
-                let el = this.$refs.sharedLink["$refs"].input;
+                const el = this.$refs.sharedLink.input;
                 if (el) {
                     el.focus();
                     if (el.setSelectionRange) {
                         el.setSelectionRange(0, this.shareLink.length);
                     } else if (el.createTextRange) {
-                        let range = el.createTextRange();
+                        const range = el.createTextRange();
                         range.collapse(true);
                         range.moveEnd('character', this.shareLink.length);
                         range.moveStart('character', 0);
@@ -447,53 +435,52 @@ export class GeneratorComponent extends Vue {
             }, 0);
 
         } else {
-            window.getSelection().removeAllRanges();
+            window?.getSelection()?.removeAllRanges();
         }
     }
 
-    setSharedLink(path) {
+    setSharedLink(path: string): void {
         this.shareLink = window.location.origin + path;
     }
 
-    copyLink() {
-        this.$copyText(this.shareLink).then((e) => {
+    copyLink(): void {
+        toClipboard(this.shareLink).then((e) => {
             if (process.env.NODE_ENV !== 'production') {
                 console.log(e);
             }
-            this.handleCopyStatus(true);
+            this.handleCopyStatus(1);
 
-            let t = setTimeout(
-                this.handleCopyStatus
-                , 2000);
+            setTimeout(this.handleCopyStatus, 2000);
         }, (e) => {
             if (process.env.NODE_ENV !== 'production') {
-                console.log(e);
+                console.error(e);
             }
-            this.handleCopyStatus(false);
+            this.handleCopyStatus(2);
         });
 
-        this.$refs.sharedLink["$refs"].input.select();
+        this.$refs.sharedLink.input.select();
     }
 
-    handleCopyStatus(status) {
+    handleCopyStatus(status: number): void {
         this.copySucceeded = status;
     }
 
     getRandomNumber(num: number): number {
         return (Math.ceil(Math.random() * num));
-    };
+    }
 
     getRandomFromArray(arr: number[]): number {
         return arr[Math.floor(Math.random() * (arr.length))];
-    };
+    }
 
-    merge(obj1: object, obj2: object): object {
-        let result = {};
+    /*** Deep merge objects ***/
+    merge<T>(obj1: T, obj2: T): T {
+        const result = {};
         let i;
         for (i in obj1) {
-            if (obj1.hasOwnProperty(i)) {
+            if (Object.prototype.hasOwnProperty.call(obj1, i)) {
                 result[i] = obj1[i];
-                if (obj2.hasOwnProperty(i) && typeof obj1[i] === typeof obj2[i]) {
+                if (Object.prototype.hasOwnProperty.call(obj2, i) && typeof obj1[i] === typeof obj2[i]) {
                     result[i] = obj2[i];
                 }
                 if ((i in obj2) && (typeof obj1[i] === "object") && (i !== null)) {
@@ -501,7 +488,6 @@ export class GeneratorComponent extends Vue {
                 }
             }
         }
-
-        return result;
-    };
+        return <T>result;
+    }
 }

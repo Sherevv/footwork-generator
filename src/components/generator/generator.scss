@@ -13,15 +13,26 @@
     padding-top: 10px;
     padding-bottom: 15px;
   }
+
   span {
     vertical-align: center;
+    color: #fff;
   }
 }
+
+.sound-btns-generator {
+  float: left;
+  margin-top: 22px;
+  margin-left: 20px;
+  position: absolute;
+}
+
 
 .info {
   clear: both;
   text-align: left;
   margin-top: 20px;
+
   .el-collapse-item__arrow {
     line-height: 48px;
   }
@@ -32,6 +43,7 @@
     padding-right: 10px;
     font-size: 14px;
   }
+
   .el-collapse-item__header {
     background-color: #fcfcfc;
     font-size: 16px;
@@ -87,4 +99,9 @@
 
 .row4:nth-child(4n-3) {
   margin-left: 100px;
+}
+
+.settings-title {
+  padding-top: 5px;
+  margin-left: 10px;
 }
