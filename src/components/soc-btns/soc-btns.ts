@@ -4,17 +4,12 @@ import { SITE_URL } from "@/config";
 
 declare const Ya; // for Yandex Share
 
-@Options({
-    computed: {
-        showRu: function () {
-            return this.$translate.lang() === 'ru';
-        }
-    }
-})
+@Options({})
 export default class SocialButtonsComponent extends Vue {
 
     url = SITE_URL;
     route = useRoute();
+    showRu = true;
 
     mounted(): void {
         const script = document.createElement('script');
@@ -62,36 +57,37 @@ export default class SocialButtonsComponent extends Vue {
 
         try {
 
-            if(this.route.params.lang)
-            {
+            if (this.route.params.lang) {
                 let lang;
-                if (typeof this.route.params.lang  === "string"){
+                if (typeof this.route.params.lang === "string") {
                     lang = this.route.params.lang
-                }else{
+                } else {
                     lang = this.route.params.lang[0];
                 }
 
+                this.showRu = lang === 'ru';
                 this.setContentUrl(content[lang]);
-
-                share.ru = Ya.share2('ya-share-ru', {
-                    content: content.ru,
-                    theme: theme.ru
-                });
-
-                share.en = Ya.share2('ya-share-en', {
-                    content: content.en,
-                    theme: theme.en
-                });
             }
 
+            share.ru = Ya.share2('ya-share-ru', {
+                content: content.ru,
+                theme: theme.ru
+            });
+
+            share.en = Ya.share2('ya-share-en', {
+                content: content.en,
+                theme: theme.en
+            });
 
             this.$watch('$route', (to) => {
                 this.setContentUrl(content[to.params.lang]);
                 this.updateShareContent(share[to.params.lang], content[to.params.lang]);
+                this.showRu = to.params.lang === 'ru';
             });
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
-                console.log(e);
+                console.error(e);
             }
         }
 
