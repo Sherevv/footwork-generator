@@ -1,10 +1,20 @@
-// ./components/EventBus.vue
-import Vue from 'vue';
-export const EventBus = new Vue();
+import emitter from 'tiny-emitter/instance'
 
-// ./plugins/EventBus.js
+export const EventBus = {
+    $on: (...args) => emitter.on(...args),
+    $once: (...args) => emitter.once(...args),
+    $off: (...args) => emitter.off(...args),
+    $emit: (...args) => emitter.emit(...args)
+}
+
+declare module '@vue/runtime-core' {
+    export interface ComponentCustomProperties {
+        $bus: any
+    }
+}
+
 export default {
-    install(Vue) {
-        Vue.prototype.$bus = EventBus;
+    install(app) {
+        app.config.globalProperties.$bus = EventBus;
     }
 }
