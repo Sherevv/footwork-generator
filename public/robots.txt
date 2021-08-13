@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /assets/
+
+User-agent: Yandex
+Disallow: /assets/
+
+Host: https://fwg.it4t.ru
