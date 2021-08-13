@@ -1,3 +1,4 @@
+<template>
 <span>
     <el-button class="gogenerate-btn" type="warning" @click="goToGenerator()">
         <it-svgicon icon="lightning" class="icon-lightning-single"></it-svgicon>
@@ -15,3 +16,6 @@
         </defs>
     </svg>
 </span>
+</template>
+<script src="./generate-btn.ts"></script>
+<style src="./generate-btn.scss" lang="scss"></style>

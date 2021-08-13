@@ -1,15 +1,12 @@
-import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
-import {SvgIconComponent} from "../../ui/svgicon";
-import './generate-btn.scss';
+import { Vue, Options, Prop } from 'vue-property-decorator';
+import SvgIconComponent from "@/ui/svgicon";
 
-@Component({
-    template: require('./generate-btn.vue'),
+@Options({
     components: {
         'it-svgicon': SvgIconComponent
     }
 })
-export class GenerateBtnComponent extends Vue {
+export default class GenerateBtnComponent extends Vue {
     @Prop(String) b: string;
     @Prop(String) n: string;
 

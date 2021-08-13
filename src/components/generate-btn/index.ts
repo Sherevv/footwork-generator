@@ -1,1 +1,1 @@
-export * from './generate-btn';
+export { default } from './generate-btn.vue';
