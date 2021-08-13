@@ -126,6 +126,10 @@ module.exports = {
                 'sizes': '36x36',
                 'type': 'image/png'
             },
-        ]
+        ],
+
+        workboxOptions: {
+            skipWaiting: true
+        }
     }
 }
