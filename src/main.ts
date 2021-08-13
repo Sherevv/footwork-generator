@@ -3,24 +3,17 @@ import VueTranslate from './plugins/vue-translate';
 import VueLocalStorage from './plugins/localstorage'
 import { VueClipboard } from '@soerenmartius/vue3-clipboard'
 import vueHeadful from './plugins/vue-headful/vue-headful';
-import './styles/styles.scss';
-import {App} from './components/app';
-import './registerServiceWorker';
 
 import { createApp } from 'vue/dist/vue.runtime.esm-bundler';
+import { App } from './components/app';
 import router from "./router";
+import './styles/styles.scss';
+import './registerServiceWorker';
+
 import ElementPlus from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
 
 const app = createApp(App);
-
-declare module '@vue/runtime-core' {
-    export interface ComponentCustomProperties {
-        $ls: any,
-        $ver: any,
-        $copyText: any
-    }
-}
 
 app.use(EventBus);
 app.use(VueLocalStorage);
