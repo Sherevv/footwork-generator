@@ -1,46 +1,50 @@
-import _Vue from 'vue';
-
-let vm: any = null;
+import { EventBus } from "@/plugins/event-bus";
+declare module '@vue/runtime-core' {
+    export interface ComponentCustomProperties {
+        $translate: any
+    }
+}
 
 // The plugin
 
 class VueTranslate {
-    fallback: string;
-    langs: string[];
+    fallback = 'en';
+    langs: string[] = ['en'];
     _vue: any;
-
-    constructor() {
-        this.fallback = 'en';
-        this.langs = ['en'];
-    }
+    current = 'en';
+    module: any;
+    locales = {};
+    modulesTranslation = [];
+    translationLoading = {};
+    commonModules: string[] = [];
+    activeModule = '';
+    vt: any;
 
     lang(): string {
-        return vm.lang;
+        return this.current;
     }
 
     // Current locale values
-    locale(): object {
-        if (!vm.locales[vm.current])
+    locale(): any {
+        if (!this.locales[this.current])
             return {};
 
-        return vm.locales[vm.current];
+        return this.locales[this.current];
     }
 
     setLang(val: string) {
         if (process.env.NODE_ENV !== 'production') {
             console.log(`setLang - lang: ${val}`);
         }
-        if (vm.current !== val) {
-            if (vm.current === '') {
-                vm.$emit('language:init', val);
+        if (this.current !== val) {
+            if (this.current === '') {
+                EventBus.$emit('language:init', val);
             } else {
-                vm.$emit('language:changed', val);
+                EventBus.$emit('language:changed', val);
             }
         }
-
-        vm.current = val;
-
-        vm.$emit('language:modified', val);
+        this.current = val;
+        EventBus.$emit('language:modified', val);
     }
 
 
@@ -50,64 +54,71 @@ class VueTranslate {
         if (!module)
             return;
 
-        if (!vm.current)
+        if (!this.current)
             return;
 
-        let lang = vm.current;
+        const lang = this.current;
 
-        if (vm.modulesTranslation[module] && vm.modulesTranslation[module][lang]) {
+        if (this.modulesTranslation[module] && this.modulesTranslation[module][lang]) {
             return;
         }
 
-        //const path = `${this.defaultPath}/${this.current}/${module}.json`;
-        let data = require('../../assets/i18n/' + lang + '/' + module + '.json');
+        //const path = `../../assets/i18n/${this.current}/${module}.json`;
+        const data = require('../../assets/i18n/' + lang + '/' + module + '.json');
+
         if (process.env.NODE_ENV !== 'production') {
             console.log(`locales load - lang: ${lang}, module: ${module}`);
         }
 
-        let newLocale = Object.create(vm.locales);
+        const newLocale = Object.create(this.locales);
         if (!newLocale[lang]) {
             newLocale[lang] = {};
         }
+        this.extend(newLocale[lang], data);
+        this.locales = Object.create(newLocale);
 
-
-        this._vue.util.extend(newLocale[lang], data);
-        vm.locales = Object.create(newLocale);
-
-        if (!vm.modulesTranslation[module]) {
-            vm.modulesTranslation[module] = {};
+        if (!this.modulesTranslation[module]) {
+            this.modulesTranslation[module] = {};
         }
-        vm.modulesTranslation[module][lang] = true;
+        this.modulesTranslation[module][lang] = true;
+        this.translationLoading[module+lang] = false;
 
+        EventBus.$emit('locales:loaded', module);
+    }
 
-        vm.$emit('locales:loaded', module);
+    extend (to, _from) {
+        for (const key in _from) {
+            to[key] = _from[key];
+        }
+        return to;
     }
 
 
     text(t: string): string {
-        if (!this.locale() || !this.locale()[t]) {
+        if (!this.locales[this.current][t]) {
             return t;
         }
-        return this.locale()[t];
+        return this.locales[this.current][t];
     }
 
-    setTranslationModule(module: string, common: boolean = false) {
+    setTranslationModule(module: string, common: any = false) {
         if (!module)
             return;
 
-        vm.activeModule = module;
+        this.activeModule = module;
 
-        if (common && !(module in vm.commonModules)) {
-            vm.commonModules.push(module);
+        if (common && !(module in this.commonModules)) {
+            this.commonModules.push(module);
+            this.module = common;
         }
 
         // If a new module add load locale on lang change
-        if (!vm.modulesTranslation[module]) {
-            vm.$on('language:modified', () => {
+        if (!this.modulesTranslation[module]) {
+            EventBus.$on('language:modified', () => {
                 if (process.env.NODE_ENV !== 'production') {
                     console.log('on: language:modified - activeModules');
                 }
-                if (vm.activeModule === module) {
+                if (this.activeModule === module) {
                     this.loadLocale(module);
                 }
             });
@@ -116,75 +127,82 @@ class VueTranslate {
         this.loadLocale(module);
     }
 
-    // Install the method
-    install(Vue: typeof _Vue, options?: any) {
+    translateHtmlElement(el:any): void{
+        if (!el.$translateKey) {
+            el.$translateKey = el.innerText;
+        }
+        el.innerText = this.text(el.$translateKey);
+    }
 
-        this._vue = Vue;
+    // Install the method
+    install(app, options?: any) {
+
+        this._vue = app;
 
         const vt = this;
+
+        app.config.globalProperties.$translate = vt;
+        app.provide('$translate', vt)
+
         this.langs = options['langs'] || this.langs;
-
-        if (!vm) {
-            vm = new Vue({
-                data() {
-                    return {
-                        current: 'ru',
-                        locales: {},
-                        modulesTranslation: [],
-                        commonModules: [],
-                        activeModule: ''
-                    };
-                },
-                computed: {
-                    lang(): string {
-                        return this.current;
-                    }
-                }
-            });
-
-            // Load translations for common modules (not Views)
-            vm.$on('language:modified', () => {
-                if (process.env.NODE_ENV !== 'production') {
-                    console.log('on: language:modified - commonModules');
-                }
-
-                for (let module of vm.commonModules) {
-                    this.loadLocale(module);
-                }
-            });
-
-            //Vue.prototype.$translate = vt;
-            Object.defineProperties(Vue.prototype, {
-                $translate: {
-                    get() {
-                        return vt;
-                    }
-                }
-            });
-
-
+        // TODO: или все же вынести на уровень роута?
+        const ls = app.config.globalProperties.$ls;
+        if(ls){
+            const lang = ls.get("lang");
+            if (!lang || this.langs.indexOf(lang) === -1) {
+                this.current = this.fallback;
+            }else{
+                this.current = lang;
+            }
         }
 
+        EventBus.$on('language:modified', () => {
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('on: language:modified - commonModules');
+            }
+
+            for (const module of this.commonModules) {
+                this.loadLocale(module);
+            }
+
+            if(vt.module?.$refs?.collapse!== undefined){
+                console.log(vt.module.$refs.collapse);
+                vt.module.$refs.collapse.$forceUpdate();
+                vt.module.$forceUpdate();
+            }
+        });
+
         // Mixin to read locales and add the translation method and directive
-        Vue.mixin({
+        app.mixin({
             methods: {
                 // An alias for the .$translate.text method
                 t(t: string): string {
-                    return vt.text(t);
+                   return vt.text(t);
                 }
+            }
+        });
+
+        app.directive("translate", {
+            mounted(el): void {
+                vt.translateHtmlElement(el);
             },
-            directives: {
-                translate(el: any) {
-                    if (!el.$translateKey) {
-                        el.$translateKey = el.innerText;
-                    }
-                    el.innerText = vt.text(el.$translateKey);
-                }
+            updated(el): void {
+                vt.translateHtmlElement(el);
             },
-            filters: {
-                translate(value: string) {
-                    return vt.text(value);
+        });
+
+        EventBus.$on('locales:loaded', () => {
+            if(vt.module){
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log('on: locales:loaded - force Update');
                 }
+                // Rerender module and refs
+                vt.module.$nextTick(() => {
+                    vt.module.$forceUpdate();
+                    Object.keys(vt.module.$refs).forEach(el => {
+                        vt.module.$refs[el].$forceUpdate();
+                    });
+                });
             }
         });
     }
