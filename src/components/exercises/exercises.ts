@@ -1,33 +1,27 @@
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import {GenerateBtnComponent} from "../generate-btn";
-import './exercises.scss';
+import { Vue, Options, Prop } from "vue-property-decorator";
+import GenerateBtnComponent from "../generate-btn";
 
-@Component({
-    template: require('./exercises.vue'),
+@Options({
     components: {
         'it-generate-btn': GenerateBtnComponent
     },
-    data() {
-        return {
-            activeItems: ['1'],
-        }
-    }
 })
-export class ExercisesComponent extends Vue {
+export default class ExercisesComponent extends Vue {
     created() {
         this.$translate.setTranslationModule('exercises', this);
     }
 
-    activeItems: string[] = [];
+    @Prop()
+    activeItems: string[] = ['1'];
 
     collapseAccordion() {
         this.activeItems = [];
-        console.log(111);
     }
 
-    unCollapseAccordion() {
+    unCollapse() {
+        console.log(this.activeItems);
         let i: any;
+        this.activeItems = [];
         for (i = 1; i < 5; i++) {
             this.activeItems.push(i.toString());
         }

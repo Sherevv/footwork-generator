@@ -1,1 +1,1 @@
-export * from './exercises';
+export { default } from './exercises.vue';
