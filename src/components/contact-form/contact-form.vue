@@ -39,8 +39,8 @@
 
           <div class="success" v-if="is_success" v-translate>ContactForm_5</div>
 
-          <div class="form-loading" v-if="is_busy">
-            <img class="spinner" src="/src/assets/img/loaderBig.gif"/> Отправка данных / Sending data ..
+          <div class="form-loading" v-show="is_busy">
+            <img class="spinner" src="/assets/images/loaderBig.gif"/> Отправка данных / Sending data ..
           </div>
 
           <el-button type="primary" id="submitbtn" name="save" class="btn"
