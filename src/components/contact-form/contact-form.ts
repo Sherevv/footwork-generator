@@ -42,33 +42,43 @@ class Errors {
 export default class ContactFormComponent extends Vue {
     contact = {};
     formErrors = new Errors();
-    errorFrom = false;
-    successFrom = false;
     is_busy = false;
     is_fail = false;
     is_success = false;
     is_form_errors = false;
 
     onSubmit(): void {
-        axios.post(FORM_ACTION, this.contact)
+
+        axios.post(FORM_ACTION, {...this.contact, ...{ajax: true}})
             .then(response => {
-                if (process.env.NODE_ENV === 'development') {
-                    console.log("from submit success");
+                if (response.data && response.data.errors) {
+
+                    if (this.formErrors.has('mailer')) {
+                        this.is_fail = true;
+                    }else{
+                        this.formErrors.setup(response.data.errors);
+                        this.is_form_errors = true;
+                    }
+                    this.is_success = false;
+                } else {
+                    this.is_success = true;
                 }
+
+                if (process.env.NODE_ENV === 'development') {
+                    if (this.is_success)
+                        console.log("from submit success");
+                    else
+                        console.log("form submit fail");
+                }
+
                 this.is_busy = false;
-                this.is_success = true;
+
             })
             .catch(error => {
                 if (process.env.NODE_ENV === 'development') {
-                    console.log("form submit fail");
+                    console.log("form submit fail", error);
                 }
-
-                if (error.response.data && error.response.data.errors) {
-                    this.formErrors.setup(error.response.data.errors);
-                    this.is_form_errors = true;
-                } else {
-                    this.is_fail = true;
-                }
+                this.is_fail = true;
                 this.is_busy = false;
             });
 
