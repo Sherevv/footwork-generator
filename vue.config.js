@@ -18,6 +18,7 @@ const plugins = process.env.NODE_ENV === 'production' ?
 
 
 module.exports = {
+    productionSourceMap: false,
     configureWebpack: {
         resolve: {
             alias: {
