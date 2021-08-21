@@ -21,4 +21,3 @@ export class GeneratorOption {
     manual_mode = false;
     nums?: number[];
 }
-

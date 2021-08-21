@@ -1,11 +1,15 @@
 import { WebStorage } from './storage';
 // eslint-disable-next-line
 const _global = window;
-declare global {  interface Window {    VueStorage?: any;  }}
+declare global {
+    interface Window {
+        VueStorage?: any;
+    }
+}
 
 declare module '@vue/runtime-core' {
     export interface ComponentCustomProperties {
-        $ls: any
+        $ls: any;
     }
 }
 
@@ -23,23 +27,25 @@ const VueStorage = {
     install(app, options = {}) {
         const _options = {
             ...options,
-            storage:  'local',
-            name:  'ls',
+            storage: 'local',
+            name: 'ls',
         };
 
-
-        const store = 'localStorage' in _global
-            ? _global.localStorage
-            : null;
+        const store = 'localStorage' in _global ? _global.localStorage : null;
 
         const ls = new WebStorage(store);
 
-        ls.setOptions(Object.assign(ls.options, {
-            namespace: '',
-        }, _options || {}));
+        ls.setOptions(
+            Object.assign(
+                ls.options,
+                {
+                    namespace: '',
+                },
+                _options || {}
+            )
+        );
         app.config.globalProperties.$ls = ls;
-        app.provide("$ls", ls);
-
+        app.provide('$ls', ls);
     },
 };
 

@@ -23,8 +23,7 @@ import Footer from '@/partials/infooter.vue';
       </div>`,
     components: {
         'it-navbar': NavbarComponent,
-        'it-footer': Footer
+        'it-footer': Footer,
     },
 })
-export default class App extends Vue {
-}
+export default class App extends Vue {}

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Vue, Options } from 'vue-class-component';
 import { FORM_ACTION } from '@/config';
-import SvgIconComponent from "@/ui/svgicon";
+import SvgIconComponent from '@/ui/svgicon';
 
 class Errors {
     errors: any;
@@ -33,10 +33,9 @@ class Errors {
     }
 }
 
-
 @Options({
     components: {
-        'it-svgicon': SvgIconComponent
+        'it-svgicon': SvgIconComponent,
     },
 })
 export default class ContactFormComponent extends Vue {
@@ -48,14 +47,13 @@ export default class ContactFormComponent extends Vue {
     is_form_errors = false;
 
     onSubmit(): void {
-
-        axios.post(FORM_ACTION, {...this.contact, ...{ajax: true}})
-            .then(response => {
+        axios
+            .post(FORM_ACTION, { ...this.contact, ...{ ajax: true } })
+            .then((response) => {
                 if (response.data && response.data.errors) {
-
                     if (this.formErrors.has('mailer')) {
                         this.is_fail = true;
-                    }else{
+                    } else {
                         this.formErrors.setup(response.data.errors);
                         this.is_form_errors = true;
                     }
@@ -65,31 +63,28 @@ export default class ContactFormComponent extends Vue {
                 }
 
                 if (process.env.NODE_ENV === 'development') {
-                    if (this.is_success)
-                        console.log("from submit success");
-                    else
-                        console.log("form submit fail");
+                    if (this.is_success) console.log('from submit success');
+                    else console.log('form submit fail');
                 }
 
                 this.is_busy = false;
-
             })
-            .catch(error => {
+            .catch((error) => {
                 if (process.env.NODE_ENV === 'development') {
-                    console.log("form submit fail", error);
+                    console.log('form submit fail', error);
                 }
                 this.is_fail = true;
                 this.is_busy = false;
             });
 
         if (process.env.NODE_ENV === 'development') {
-            console.log("form submit");
+            console.log('form submit');
         }
     }
 
     onFormChange(): void {
         if (process.env.NODE_ENV === 'development') {
-            console.log("form change");
+            console.log('form change');
         }
 
         this.is_fail = false;

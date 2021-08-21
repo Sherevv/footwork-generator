@@ -1,20 +1,19 @@
-import { Vue, Options, Prop } from "vue-property-decorator";
+import { Vue, Options, Prop } from 'vue-property-decorator';
 import { EMAIL } from '@/config';
-import ContactFormComponent from "../contact-form";
-import SvgIconComponent from "@/ui/svgicon/svgicon.vue";
-
+import ContactFormComponent from '../contact-form';
+import SvgIconComponent from '@/ui/svgicon/svgicon.vue';
 
 @Options({
     components: {
         'it-contact-form': ContactFormComponent,
-        'it-svgicon': SvgIconComponent
-    }
+        'it-svgicon': SvgIconComponent,
+    },
 })
 export default class AboutComponent extends Vue {
     @Prop()
     email = EMAIL;
 
-    created() {
+    created(): void {
         this.$translate.setTranslationModule('about', this);
     }
 }

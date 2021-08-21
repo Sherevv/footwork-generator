@@ -4,11 +4,20 @@
 
     <p v-translate>Description_1</p>
 
-    <p><span class="card white card-sm">0</span> - <span v-translate>Description_2</span></p>
+    <p>
+      <span class="card white card-sm">0</span> -
+      <span v-translate>Description_2</span>
+    </p>
 
-    <p><span class="card blue card-sm">1</span> - <span v-translate>Description_3</span></p>
+    <p>
+      <span class="card blue card-sm">1</span> -
+      <span v-translate>Description_3</span>
+    </p>
 
-    <p><span class="card red card-sm">2</span> - <span v-translate>Description_4</span></p>
+    <p>
+      <span class="card red card-sm">2</span> -
+      <span v-translate>Description_4</span>
+    </p>
 
     <p v-html="t('Description_6')"></p>
 
@@ -54,7 +63,7 @@
         <div class="card-lbl right-lbl">step</div>
       </div>
     </div>
-    <br/>
+    <br />
 
     <p v-html="t('Description_10')"></p>
 
@@ -109,8 +118,11 @@
 
     <h3 v-translate>Description_syncopation</h3>
     <div v-html="t('Description_sync_1')"></div>
-    <p><span class="card green card-sm">S</span> - <span v-translate>Description_sync_2</span> <span
-        class="card red card-sm">2</span></p>
+    <p>
+      <span class="card green card-sm">S</span> -
+      <span v-translate>Description_sync_2</span>
+      <span class="card red card-sm">2</span>
+    </p>
     <div class="cards-block-sm">
       <div class="card-block">
         <span class="card blue">1</span>
@@ -144,9 +156,11 @@
 
     <h3 v-translate>Description_settings</h3>
     <div v-html="t('Description_settings_1')"></div>
-    <vue-headful :title="t('Description') + ' | ' + t('TITLE')"
-                 :lang="$route.params.lang"
-                 :description="t('Description_meta_description')"/>
+    <vue-headful
+      :title="t('Description') + ' | ' + t('TITLE')"
+      :lang="$route.params.lang"
+      :description="t('Description_meta_description')"
+    />
   </div>
 </template>
 <script src="./description.ts" lang="ts"></script>

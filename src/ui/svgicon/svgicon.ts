@@ -7,9 +7,8 @@ import { Vue, Options } from 'vue-class-component';
         },
         iconClass: {
             type: String,
-            default: ''
+            default: '',
         },
-    }
+    },
 })
-export default class SvgIconComponent extends Vue {
-}
+export default class SvgIconComponent extends Vue {}

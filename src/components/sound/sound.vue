@@ -3,8 +3,16 @@
     <div class="sound-label" v-translate>Sound</div>
     <div class="sound-btns">
       <el-button type="danger" @click="toggleSound()" class="settings_play-btn">
-        <it-svgicon v-if="!beats_on" icon="play" icon-class="icon-btn"></it-svgicon>
-        <it-svgicon v-if="beats_on" icon="stop" icon-class="icon-btn"></it-svgicon>
+        <it-svgicon
+          v-if="!beats_on"
+          icon="play"
+          icon-class="icon-btn"
+        ></it-svgicon>
+        <it-svgicon
+          v-if="beats_on"
+          icon="stop"
+          icon-class="icon-btn"
+        ></it-svgicon>
       </el-button>
 
       <el-radio-group v-model="soundType">
@@ -16,8 +24,12 @@
 
     <p>
       <label class="label-radio">
-        <el-switch v-model="isPlayAccent" :inactive-color="swOffClr"></el-switch>
-        {{ t('Play_accent') }}</label>
+        <el-switch
+          v-model="isPlayAccent"
+          :inactive-color="swOffClr"
+        ></el-switch>
+        {{ t('Play_accent') }}</label
+      >
       <el-radio-group v-model="accentBit">
         <el-radio-button :label="4">4</el-radio-button>
         <el-radio-button :label="6">6</el-radio-button>
@@ -32,8 +44,7 @@
       </label>
       <div class="slider-bpm">{{ bpm }}</div>
       <div class="slider">
-        <el-slider v-model="bpm" :max="300" :min="30">
-        </el-slider>
+        <el-slider v-model="bpm" :max="300" :min="30"> </el-slider>
         <div class="slider-start">30</div>
         <div class="slider-end">300</div>
       </div>

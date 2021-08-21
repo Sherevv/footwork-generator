@@ -1,10 +1,9 @@
 import { Vue, Options, Prop } from 'vue-property-decorator';
 import { toClipboard } from '@soerenmartius/vue3-clipboard';
-import { APP_VERSION } from "@/config";
+import { APP_VERSION } from '@/config';
 import SoundComponent from '../sound';
-import SvgIconComponent from "@/ui/svgicon";
-import { GeneratorOption, SoundOption } from "@/components/generator/options";
-
+import SvgIconComponent from '@/ui/svgicon';
+import { GeneratorOption, SoundOption } from '@/components/generator/options';
 
 class Card {
     num: number;
@@ -22,28 +21,25 @@ class Card {
     }
 }
 
-
 @Options({
     components: {
         'it-sound': SoundComponent,
-        'it-svgicon': SvgIconComponent
+        'it-svgicon': SvgIconComponent,
     },
     beforeRouteLeave(to, from, next) {
         // Stop play on leave page
-        this.$bus.$emit("stopPlayDown");
+        this.$bus.$emit('stopPlayDown');
         next();
     },
 })
 export default class GeneratorComponent extends Vue {
-
-    declare $refs: Vue["$refs"] & {
-        sharedLink: HTMLFormElement
-    }
+    declare $refs: Vue['$refs'] & {
+        sharedLink: HTMLFormElement;
+    };
     //sharedLink:HTMLFormElement = ref(null);
 
     @Prop(String) b: string;
     @Prop(String) n: string;
-
 
     copySucceeded = 0;
     shareLink = '';
@@ -55,7 +51,7 @@ export default class GeneratorComponent extends Vue {
     swOffClr = '#ff999c';
     nums: number[] = [];
 
-    evenness = 'even'
+    evenness = 'even';
 
     options = <GeneratorOption>{};
     options_def = {
@@ -71,7 +67,7 @@ export default class GeneratorComponent extends Vue {
         couple: true,
         sound: new SoundOption(),
         kick_instead_hold: false,
-        manual_mode: false
+        manual_mode: false,
     };
 
     classes = [
@@ -83,12 +79,12 @@ export default class GeneratorComponent extends Vue {
     cards = [];
     isShowShareLink = false;
 
-
     created(): void {
         this.$translate.setTranslationModule('generator', this);
 
-
-        const options_query = <GeneratorOption>this.checkQueryParams(this.b, this.n);
+        const options_query = <GeneratorOption>(
+            this.checkQueryParams(this.b, this.n)
+        );
 
         // Load saved options from LocalStorage
         this.restoreOptions(options_query);
@@ -110,12 +106,11 @@ export default class GeneratorComponent extends Vue {
             this.options = this.merge(this.options, options_query);
 
             // Get nums from query params
-            if (options_query["nums"]) {
-                this.nums = options_query["nums"];
+            if (options_query['nums']) {
+                this.nums = options_query['nums'];
             } else {
                 this.nums = this.$ls.get('nums', []);
             }
-
         } else {
             // If versions does not equal, try to merge with defaults
             if (opt) {
@@ -128,9 +123,9 @@ export default class GeneratorComponent extends Vue {
             this.options = this.merge(this.options, options_query);
 
             // Get nums from query params
-            if (options_query["nums"]) {
-                this.$ls.set('nums', options_query["nums"]);
-                this.nums = options_query["nums"];
+            if (options_query['nums']) {
+                this.$ls.set('nums', options_query['nums']);
+                this.nums = options_query['nums'];
             }
             this.$ls.set('ver', this.opt_ver);
         }
@@ -139,14 +134,21 @@ export default class GeneratorComponent extends Vue {
     }
 
     mounted(): void {
-        this.$watch('options', (value) => {
-            this.$ls.set('options', value);
-        }, {deep: true});
+        this.$watch(
+            'options',
+            (value) => {
+                this.$ls.set('options', value);
+            },
+            { deep: true }
+        );
 
-        this.$watch('nums', (value) => {
-            this.$ls.set('nums', value);
-        }, {deep: true});
-
+        this.$watch(
+            'nums',
+            (value) => {
+                this.$ls.set('nums', value);
+            },
+            { deep: true }
+        );
 
         // when use manual mode than do not couple steps
         this.$watch('options.manual_mode', (mode) => {
@@ -168,32 +170,40 @@ export default class GeneratorComponent extends Vue {
             this.setSharedLink(to.fullPath);
         });
 
-        this.$watch(() => {
-            return this.options.evenness
-        }, () => {
-            if (this.options.evenness === 'no') {
-                this.rerender();
-            } else {
-                this.generate([]);
+        this.$watch(
+            () => {
+                return this.options.evenness;
+            },
+            () => {
+                if (this.options.evenness === 'no') {
+                    this.rerender();
+                } else {
+                    this.generate([]);
+                }
             }
-        });
+        );
 
-        this.$watch(() => {
-            return this.options.bit_count
-        }, () => {
-            if (this.nums.length % this.options.bit_count === 0) {
-                this.rerender();
-            } else {
-                this.generate([]);
+        this.$watch(
+            () => {
+                return this.options.bit_count;
+            },
+            () => {
+                if (this.nums.length % this.options.bit_count === 0) {
+                    this.rerender();
+                } else {
+                    this.generate([]);
+                }
             }
-        });
+        );
 
-        this.$watch(() => {
-            return `${this.options.couple}${this.options.kick_instead_hold}${this.options.show_triple}`
-        }, () => {
-            this.rerender();
-        });
-
+        this.$watch(
+            () => {
+                return `${this.options.couple}${this.options.kick_instead_hold}${this.options.show_triple}`;
+            },
+            () => {
+                this.rerender();
+            }
+        );
 
         this.$bus.$on('updatePlayUp', (value: boolean) => {
             this.beats_on = value;
@@ -216,7 +226,7 @@ export default class GeneratorComponent extends Vue {
             evenness: 'no',
             syncopation: 0,
             rock_step: false,
-            nums: []
+            nums: [],
         };
 
         let b = 8,
@@ -241,7 +251,7 @@ export default class GeneratorComponent extends Vue {
             options.bit_count = b;
             options.rows = n.length / b;
             options.nums = n;
-            let s_count = n.filter(x => x === -1).length;
+            let s_count = n.filter((x) => x === -1).length;
             if (s_count > 0) {
                 if (s_count > b) {
                     s_count = b;
@@ -254,10 +264,9 @@ export default class GeneratorComponent extends Vue {
         }
     }
 
-
     toggleSound(): void {
         this.beats_on = !this.beats_on;
-        this.$bus.$emit("updatePlayDown", this.beats_on);
+        this.$bus.$emit('updatePlayDown', this.beats_on);
     }
 
     addBeats(): void {
@@ -280,14 +289,13 @@ export default class GeneratorComponent extends Vue {
             console.log(nums);
         }
 
-
         let use_old_nums = false;
         if (nums && nums.length > 0) {
             use_old_nums = true;
         }
 
-        const cards: Card[] = this.cards = [];
-        const beats: number[] = this.beats = [];
+        const cards: Card[] = (this.cards = []);
+        const beats: number[] = (this.beats = []);
         const options = this.options;
         let sum = 0;
         let num = 0;
@@ -295,26 +303,27 @@ export default class GeneratorComponent extends Vue {
         const num_arr: number[] = [];
         const len = options.bit_count * options.rows;
         for (let i = 0; i < len; i++) {
-
             if (!use_old_nums) {
                 if (options.rock_step && i % options.bit_count < 2) {
                     num = 1;
-                } else if (options.evenness !== 'no' && 0 === (i + 1) % options.bit_count) {
+                } else if (
+                    options.evenness !== 'no' &&
+                    0 === (i + 1) % options.bit_count
+                ) {
                     if (options.evenness === 'even') {
                         if (sum % 2 == 0) {
                             num = this.getRandomFromArray([0, 2]);
                         } else {
                             if (sync_cnt >= options.syncopation) {
-                                num = 1
+                                num = 1;
                             } else {
                                 num = this.getRandomFromArray([1, -1]);
                             }
                         }
                     } else {
-
                         if (sum % 2 == 0) {
                             if (sync_cnt >= options.syncopation) {
-                                num = 1
+                                num = 1;
                             } else {
                                 num = this.getRandomFromArray([1, -1]);
                             }
@@ -324,13 +333,11 @@ export default class GeneratorComponent extends Vue {
                     }
                 } else {
                     if (sync_cnt >= options.syncopation) {
-                        num = this.getRandomNumber(3) - 1;  // [0,1,2]
-                        if (num < 0)
-                            num = 0;
+                        num = this.getRandomNumber(3) - 1; // [0,1,2]
+                        if (num < 0) num = 0;
                     } else {
-                        num = this.getRandomNumber(4) - 2;  // [-1,0,1,2]
-                        if (num < -1)
-                            num = -1;
+                        num = this.getRandomNumber(4) - 2; // [-1,0,1,2]
+                        if (num < -1) num = -1;
                     }
                 }
             } else {
@@ -351,10 +358,9 @@ export default class GeneratorComponent extends Vue {
                 beats[2 * i + 1] = 0;
             }
 
-            const k = (num > -1) ? num : 3;
-            const card = {...this.classes[k]};
-            if (num === 0 && options.kick_instead_hold)
-                card.step = 'kick';
+            const k = num > -1 ? num : 3;
+            const card = { ...this.classes[k] };
+            if (num === 0 && options.kick_instead_hold) card.step = 'kick';
             cards[i] = card;
 
             if (options.couple) {
@@ -365,7 +371,10 @@ export default class GeneratorComponent extends Vue {
                 }
             }
 
-            if (options.show_triple && ((options.couple && i % 2 === 1) || (!options.couple && i > 0))) {
+            if (
+                options.show_triple &&
+                ((options.couple && i % 2 === 1) || (!options.couple && i > 0))
+            ) {
                 if (num === 2 && cards[i - 1].num % 2 != 0) {
                     if (cards[i - 1].num === 1) {
                         cards[i - 1].step = 'triple';
@@ -377,13 +386,16 @@ export default class GeneratorComponent extends Vue {
                     cards[i].label_class = 'right-lbl';
                 }
             }
-            if (options.rock_step && i % options.bit_count === 1 && options.couple) {
+            if (
+                options.rock_step &&
+                i % options.bit_count === 1 &&
+                options.couple
+            ) {
                 cards[i - 1].step = 'rock';
                 cards[i - 1].label_class = 'left-lbl';
                 cards[i].step = 'step';
                 cards[i].label_class = 'right-lbl';
             }
-
 
             sum += Math.abs(num);
 
@@ -400,15 +412,20 @@ export default class GeneratorComponent extends Vue {
 
         this.$ls.set('nums', num_arr);
 
-        this.$router.push({
-            name: 'Generator',
-            params: {lang: this.$translate.lang()},
-            query: {b: options.bit_count.toString(), n: this.nums.toString()}
-        }).catch(error => {
-            if (error.name != "NavigationDuplicated") {
-                throw error;
-            }
-        });
+        this.$router
+            .push({
+                name: 'Generator',
+                params: { lang: this.$translate.lang() },
+                query: {
+                    b: options.bit_count.toString(),
+                    n: this.nums.toString(),
+                },
+            })
+            .catch((error) => {
+                if (error.name != 'NavigationDuplicated') {
+                    throw error;
+                }
+            });
     }
 
     toggleShareRhythm(): void {
@@ -432,7 +449,6 @@ export default class GeneratorComponent extends Vue {
                     }
                 }
             }, 0);
-
         } else {
             window?.getSelection()?.removeAllRanges();
         }
@@ -443,19 +459,22 @@ export default class GeneratorComponent extends Vue {
     }
 
     copyLink(): void {
-        toClipboard(this.shareLink).then((e) => {
-            if (process.env.NODE_ENV !== 'production') {
-                console.log(e);
-            }
-            this.handleCopyStatus(1);
+        toClipboard(this.shareLink).then(
+            (e) => {
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log(e);
+                }
+                this.handleCopyStatus(1);
 
-            setTimeout(this.handleCopyStatus, 2000);
-        }, (e) => {
-            if (process.env.NODE_ENV !== 'production') {
-                console.error(e);
+                setTimeout(this.handleCopyStatus, 2000);
+            },
+            (e) => {
+                if (process.env.NODE_ENV !== 'production') {
+                    console.error(e);
+                }
+                this.handleCopyStatus(2);
             }
-            this.handleCopyStatus(2);
-        });
+        );
 
         this.$refs.sharedLink.input.select();
     }
@@ -465,11 +484,11 @@ export default class GeneratorComponent extends Vue {
     }
 
     getRandomNumber(num: number): number {
-        return (Math.ceil(Math.random() * num));
+        return Math.ceil(Math.random() * num);
     }
 
     getRandomFromArray(arr: number[]): number {
-        return arr[Math.floor(Math.random() * (arr.length))];
+        return arr[Math.floor(Math.random() * arr.length)];
     }
 
     /*** Deep merge objects ***/
@@ -479,10 +498,13 @@ export default class GeneratorComponent extends Vue {
         for (i in obj1) {
             if (Object.prototype.hasOwnProperty.call(obj1, i)) {
                 result[i] = obj1[i];
-                if (Object.prototype.hasOwnProperty.call(obj2, i) && typeof obj1[i] === typeof obj2[i]) {
+                if (
+                    Object.prototype.hasOwnProperty.call(obj2, i) &&
+                    typeof obj1[i] === typeof obj2[i]
+                ) {
                     result[i] = obj2[i];
                 }
-                if ((i in obj2) && (typeof obj1[i] === "object") && (i !== null)) {
+                if (i in obj2 && typeof obj1[i] === 'object' && i !== null) {
                     obj1[i] = this.merge(obj1[i], obj2[i]);
                 }
             }
