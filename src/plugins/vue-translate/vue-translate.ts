@@ -1,4 +1,5 @@
 import { EventBus } from "@/plugins/event-bus";
+
 declare module '@vue/runtime-core' {
     export interface ComponentCustomProperties {
         $translate: any
@@ -15,7 +16,6 @@ class VueTranslate {
     module: any;
     locales = {};
     modulesTranslation = [];
-    translationLoading = {};
     commonModules: string[] = [];
     activeModule = '';
     vt: any;
@@ -63,8 +63,7 @@ class VueTranslate {
             return;
         }
 
-        //const path = `../../assets/i18n/${this.current}/${module}.json`;
-        const data = require('../../assets/i18n/' + lang + '/' + module + '.json');
+        const data = require(`../../assets/i18n/${lang}/${module}.json`);
 
         if (process.env.NODE_ENV !== 'production') {
             console.log(`locales load - lang: ${lang}, module: ${module}`);
@@ -74,6 +73,7 @@ class VueTranslate {
         if (!newLocale[lang]) {
             newLocale[lang] = {};
         }
+
         this.extend(newLocale[lang], data);
         this.locales = Object.create(newLocale);
 
@@ -81,7 +81,6 @@ class VueTranslate {
             this.modulesTranslation[module] = {};
         }
         this.modulesTranslation[module][lang] = true;
-        this.translationLoading[module+lang] = false;
 
         EventBus.$emit('locales:loaded', module);
     }
@@ -145,16 +144,6 @@ class VueTranslate {
         app.provide('$translate', vt)
 
         this.langs = options['langs'] || this.langs;
-        // TODO: или все же вынести на уровень роута?
-        const ls = app.config.globalProperties.$ls;
-        if(ls){
-            const lang = ls.get("lang");
-            if (!lang || this.langs.indexOf(lang) === -1) {
-                this.current = this.fallback;
-            }else{
-                this.current = lang;
-            }
-        }
 
         EventBus.$on('language:modified', () => {
             if (process.env.NODE_ENV !== 'production') {
@@ -166,7 +155,6 @@ class VueTranslate {
             }
 
             if(vt.module?.$refs?.collapse!== undefined){
-                console.log(vt.module.$refs.collapse);
                 vt.module.$refs.collapse.$forceUpdate();
                 vt.module.$forceUpdate();
             }
