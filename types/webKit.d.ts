@@ -1,1 +1,1 @@
-declare let webkitAudioContext: any;
+declare let webkitAudioContext: AudioContext;
