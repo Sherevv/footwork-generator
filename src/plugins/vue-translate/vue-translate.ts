@@ -1,13 +1,12 @@
-import { EventBus } from "@/plugins/event-bus";
+import { EventBus } from '@/plugins/event-bus';
 
 declare module '@vue/runtime-core' {
     export interface ComponentCustomProperties {
-        $translate: any
+        $translate: any;
     }
 }
 
 // The plugin
-
 class VueTranslate {
     fallback = 'en';
     langs: string[] = ['en'];
@@ -18,7 +17,6 @@ class VueTranslate {
     modulesTranslation = [];
     commonModules: string[] = [];
     activeModule = '';
-    vt: any;
 
     lang(): string {
         return this.current;
@@ -26,8 +24,7 @@ class VueTranslate {
 
     // Current locale values
     locale(): any {
-        if (!this.locales[this.current])
-            return {};
+        if (!this.locales[this.current]) return {};
 
         return this.locales[this.current];
     }
@@ -47,19 +44,18 @@ class VueTranslate {
         EventBus.$emit('language:modified', val);
     }
 
-
     // Set a locale to use
     loadLocale(module: string): any {
+        if (!module) return;
 
-        if (!module)
-            return;
-
-        if (!this.current)
-            return;
+        if (!this.current) return;
 
         const lang = this.current;
 
-        if (this.modulesTranslation[module] && this.modulesTranslation[module][lang]) {
+        if (
+            this.modulesTranslation[module] &&
+            this.modulesTranslation[module][lang]
+        ) {
             return;
         }
 
@@ -85,13 +81,12 @@ class VueTranslate {
         EventBus.$emit('locales:loaded', module);
     }
 
-    extend (to, _from) {
+    extend(to, _from) {
         for (const key in _from) {
             to[key] = _from[key];
         }
         return to;
     }
-
 
     text(t: string): string {
         if (!this.locales[this.current][t]) {
@@ -101,8 +96,7 @@ class VueTranslate {
     }
 
     setTranslationModule(module: string, common: any = false) {
-        if (!module)
-            return;
+        if (!module) return;
 
         this.activeModule = module;
 
@@ -126,7 +120,7 @@ class VueTranslate {
         this.loadLocale(module);
     }
 
-    translateHtmlElement(el:any): void{
+    translateHtmlElement(el: any): void {
         if (!el.$translateKey) {
             el.$translateKey = el.innerText;
         }
@@ -135,13 +129,10 @@ class VueTranslate {
 
     // Install the method
     install(app, options?: any) {
-
         this._vue = app;
 
-        const vt = this;
-
-        app.config.globalProperties.$translate = vt;
-        app.provide('$translate', vt)
+        app.config.globalProperties.$translate = this;
+        app.provide('$translate', this);
 
         this.langs = options['langs'] || this.langs;
 
@@ -154,9 +145,9 @@ class VueTranslate {
                 this.loadLocale(module);
             }
 
-            if(vt.module?.$refs?.collapse!== undefined){
-                vt.module.$refs.collapse.$forceUpdate();
-                vt.module.$forceUpdate();
+            if (this.module?.$refs?.collapse !== undefined) {
+                this.module.$refs.collapse.$forceUpdate();
+                this.module.$forceUpdate();
             }
         });
 
@@ -164,31 +155,31 @@ class VueTranslate {
         app.mixin({
             methods: {
                 // An alias for the .$translate.text method
-                t(t: string): string {
-                   return vt.text(t);
-                }
-            }
+                t: (t: string): string => {
+                    return this.text(t);
+                },
+            },
         });
 
-        app.directive("translate", {
-            mounted(el): void {
-                vt.translateHtmlElement(el);
+        app.directive('translate', {
+            mounted: (el): void => {
+                this.translateHtmlElement(el);
             },
-            updated(el): void {
-                vt.translateHtmlElement(el);
+            updated: (el): void => {
+                this.translateHtmlElement(el);
             },
         });
 
         EventBus.$on('locales:loaded', () => {
-            if(vt.module){
+            if (this.module) {
                 if (process.env.NODE_ENV !== 'production') {
                     console.log('on: locales:loaded - force Update');
                 }
                 // Rerender module and refs
-                vt.module.$nextTick(() => {
-                    vt.module.$forceUpdate();
-                    Object.keys(vt.module.$refs).forEach(el => {
-                        vt.module.$refs[el].$forceUpdate();
+                this.module.$nextTick(() => {
+                    this.module.$forceUpdate();
+                    Object.keys(this.module.$refs).forEach((el) => {
+                        this.module.$refs[el].$forceUpdate();
                     });
                 });
             }
