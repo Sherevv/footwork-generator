@@ -8,9 +8,9 @@
 
     <it-contact-form :key="$translate.current"></it-contact-form>
 
-    <p><span v-translate>About_6</span> <a href="#socBtns">
+    <p><span v-translate>About_6</span>
       <it-svgicon icon="arrowDown"></it-svgicon>
-    </a></p>
+    </p>
 
     <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1"
          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
