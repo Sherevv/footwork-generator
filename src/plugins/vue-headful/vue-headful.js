@@ -1,13 +1,13 @@
 import headful from 'headful';
 
-const handler = props => headful(getPassedProps(props));
+const handler = (props) => headful(getPassedProps(props));
 
 export default {
-    template:"",
+    template: '',
     name: 'vue-headful',
     props: Object.keys(headful.props),
     watch: {
-        '$props': {
+        $props: {
             handler,
             deep: true,
             immediate: true,
