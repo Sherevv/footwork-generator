@@ -24,26 +24,28 @@
  */
 
 //Forward-declare AudioContext for Safari and older Google Chrome.
-AudioContext = AudioContext || webkitAudioContext;
+// eslint-disable-next-line no-undef
+const audioContext = AudioContext || webkitAudioContext;
 
 function AudioSampleLoader() {
-    "use strict";
+    'use strict';
     this.loaded = 0;
+    this.src = null;
 }
 
 AudioSampleLoader.prototype.send = function () {
-    "use strict";
+    'use strict';
     const console = window.console;
     let i;
-    if (!this.hasOwnProperty('ctx')) {
-        this.ctx = new AudioContext();
-    } else if (!(this.ctx instanceof AudioContext)) {
+    if (!Object.prototype.hasOwnProperty.call(this, 'ctx')) {
+        this.ctx = new audioContext();
+    } else if (!(this.ctx instanceof audioContext)) {
         //TODO: Post an error, but do not overwrite the variable with a valid context.
         console.error('AudioSampleLoader: ctx not an instance of AudioContext');
         return;
     }
 
-    if (!this.hasOwnProperty('onload')) {
+    if (!Object.prototype.hasOwnProperty.call(this, 'onload')) {
         console.error('AudioSampleLoader: Callback onload does not exist');
         return;
     } else if (typeof this.onload !== 'function') {
@@ -51,15 +53,19 @@ AudioSampleLoader.prototype.send = function () {
         return;
     }
 
-    if (!this.hasOwnProperty('onerror') || typeof this.onerror !== 'function') {
-        this.onerror = function () {
-        };
+    if (
+        !Object.prototype.hasOwnProperty.call(this, 'onerror') ||
+        typeof this.onerror !== 'function'
+    ) {
+        this.onerror = function () {};
     }
 
     if (Array.isArray(this.src)) {
         for (i = 0; i < this.src.length; i += 1) {
             if (typeof this.src[i] !== 'string') {
-                console.error('AudioSampleLoader: src[' + i + '] is not a string');
+                console.error(
+                    'AudioSampleLoader: src[' + i + '] is not a string'
+                );
                 this.onerror();
                 return;
             }
@@ -70,12 +76,9 @@ AudioSampleLoader.prototype.send = function () {
         for (i = 0; i < this.src.length; i += 1) {
             this.loadOneOfBuffers(this.src[i], i);
         }
-
     } else if (typeof this.src === 'string') {
-
         //If src is just a single string.
         this.loadOneBuffer(this.src);
-
     } else {
         console.error('AudioSampleLoader: src not string or list of strings');
         this.onerror();
@@ -83,7 +86,7 @@ AudioSampleLoader.prototype.send = function () {
 };
 
 AudioSampleLoader.prototype.loadOneBuffer = function (url) {
-    "use strict";
+    'use strict';
     const console = window.console,
         loader = this,
         XHR = new XMLHttpRequest();
@@ -98,7 +101,9 @@ AudioSampleLoader.prototype.loadOneBuffer = function (url) {
                 loader.onload();
             },
             function () {
-                console.error('AudioSampleLoader: ctx.decodeAudioData() called onerror');
+                console.error(
+                    'AudioSampleLoader: ctx.decodeAudioData() called onerror'
+                );
                 loader.onerror();
             }
         );
@@ -112,7 +117,7 @@ AudioSampleLoader.prototype.loadOneBuffer = function (url) {
 };
 
 AudioSampleLoader.prototype.loadOneOfBuffers = function (url, index) {
-    "use strict";
+    'use strict';
     const console = window.console,
         loader = this,
         XHR = new XMLHttpRequest();
@@ -131,7 +136,9 @@ AudioSampleLoader.prototype.loadOneOfBuffers = function (url, index) {
                 }
             },
             function () {
-                console.error('AudioSampleLoader: ctx.decodeAudioData() called onerror');
+                console.error(
+                    'AudioSampleLoader: ctx.decodeAudioData() called onerror'
+                );
                 loader.onerror();
             }
         );
