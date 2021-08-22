@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
-
+/* eslint-disable */
 const AboutComponent = () =>
     import(/* webpackChunkName: "about" */ '../components/about');
 const GeneratorComponent = () =>

@@ -1,4 +1,5 @@
 import { WebStorage } from './storage';
+/* eslint-disable */
 // eslint-disable-next-line
 const _global = window;
 declare global {

@@ -1,5 +1,5 @@
 import emitter from 'tiny-emitter/instance';
-
+/* eslint-disable */
 export const EventBus = {
     $on: (...args) => emitter.on(...args),
     $once: (...args) => emitter.once(...args),
