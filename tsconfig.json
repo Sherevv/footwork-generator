@@ -13,7 +13,7 @@
     "strictPropertyInitialization": false,
     "allowJs": true,
     "noImplicitAny": false,
-    "noImplicitThis": true,
+    "noImplicitThis": false,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
@@ -37,9 +37,9 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx",
-    "types/webKit.d.ts"
+    "types/custom-typings.d.ts",
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
   ]
 }

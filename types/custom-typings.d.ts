@@ -1,13 +1,12 @@
-declare module "*.json" {
+declare module '*.json' {
     const value: any;
     export default value;
 }
 
 declare module 'debounce';
 
+// Chrome AudioContext
+declare let webkitAudioContext: AudioContext;
 
-declare module '@vue/runtime-core' {
-    export interface ComponentCustomProperties {
-        $ls: any;
-    }
-}
+// Yandex Share
+declare const Ya: any;
