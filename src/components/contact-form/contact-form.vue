@@ -37,9 +37,7 @@
                 <it-svgicon icon="at" class="icon-form"></it-svgicon>
               </template>
             </el-input>
-            <div v-if="formErrors.has('email')" class="error" v-translate>
-              ContactForm_2
-            </div>
+            <div v-if="formErrors.has('email')" class="error" v-translate>ContactForm_2</div>
           </div>
           <div class="form-group">
             <div
@@ -63,15 +61,11 @@
               >
               </el-input>
             </div>
-            <div v-if="formErrors.has('message')" class="error" v-translate>
-              ContactForm_3
-            </div>
+            <div v-if="formErrors.has('message')" class="error" v-translate>ContactForm_3</div>
           </div>
           <p v-html="t('ContactForm_1')"></p>
 
-          <div class="error" v-show="is_form_errors || is_fail" v-translate>
-            ContactForm_4
-          </div>
+          <div class="error" v-show="is_form_errors || is_fail" v-translate>ContactForm_4</div>
 
           <div class="success" v-if="is_success" v-translate>ContactForm_5</div>
 
