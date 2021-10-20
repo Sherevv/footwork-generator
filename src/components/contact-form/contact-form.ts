@@ -49,8 +49,8 @@ export default class ContactFormComponent extends Vue {
     onSubmit(): void {
         axios
             .post(FORM_ACTION, { ...this.contact, ...{ ajax: true } })
-            .then((response) => {
-                if (response.data && response.data.errors) {
+            .then((response: any) => {
+                if (response.data?.errors) {
                     if (this.formErrors.has('mailer')) {
                         this.is_fail = true;
                     } else {
